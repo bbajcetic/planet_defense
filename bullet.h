@@ -9,12 +9,12 @@ enum side {ALLY, ENEMY};
 
 class reg_bullet {
 	public:
-		bullet(GLfloat x, GLfloat y, std::string direction);
+		reg_bullet(GLfloat x, GLfloat y, GLint _speed, side _good_bad);
 		void display_bullet(void);
 		void move();
 	private:
 		GLint speed; //negative or positive depending on direction
-		GLfloat[3] origin;
+		GLfloat origin[3];
 		GLfloat length = 8;
 		GLfloat width = 2;
 		GLfloat triangles[2];
@@ -23,6 +23,18 @@ class reg_bullet {
 		void load_vertices();
 		GLfloat quad[12];
 };
+
+void queue_bullet(reg_bullet _bullet) {
+	;
+}
+
+void check_enemy_hit(GLfloat[], GLfloat length, GLfloat width) {
+	;
+}
+
+void check_ally_hit(GLfloat[], GLfloat length, GLfloat width) {
+	;
+}
 //give (x, y) position of the middle of the back end of the bullet
 reg_bullet::reg_bullet(GLfloat x, GLfloat y, GLint _speed, side _good_bad):
 	speed(_speed), origin{x, y+length/2, 0.0}, good_bad(_good_bad) 
@@ -30,7 +42,7 @@ reg_bullet::reg_bullet(GLfloat x, GLfloat y, GLint _speed, side _good_bad):
 	load_vertices();
 }
 
-void bullet::load_vertices() {
+void reg_bullet::load_vertices() {
 	GLfloat temp_quad[] = 
 	{origin[0]-width/2, origin[1]+length/2, 0.0, 
 	 origin[0]+width/2, origin[1]+length/2, 0.0, 
@@ -60,13 +72,10 @@ void reg_bullet::move() {
 	load_vertices();
 }
 
-void main_ship::display_bullet(void) {
+void reg_bullet::display_bullet(void) {
 	glColor3f(1.0, 1.0, 1.0);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, quad);
 	glDrawArrays(GL_QUADS, 0, (GLsizei) 4);
 	//glDisableClientState(GL_VERTEX_ARRAY);
 }
-
-
-

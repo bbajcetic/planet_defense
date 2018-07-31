@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "main_ship.h"
+#include "bullet.h"
 #include <vector>
 
 const GLint WINDOW_HEIGHT = 500;
@@ -14,11 +15,13 @@ void reshape(int w, int h) {
 
 //vector <space_ship*> all_ships;
 main_ship sonic(WINDOW_WIDTH/2, 50, 1);
+reg_bullet bully(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 20, ALLY);
 //width/2 b/c start in middle of screen
 void game_on(void) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(1,1,1);
 	sonic.display_ship();
+	bully.display_bullet();
 
 	glutSwapBuffers();
 	glFlush();
