@@ -76,8 +76,7 @@ void press_keys(unsigned char key, int x, int y) {
 	glutPostRedisplay();
 }
 void idle_func(void) {
-	std::vector<reg_bullet>::iterator it = projectiles.begin();
-	while(it != projectiles.end()) {
+	for(std::vector<reg_bullet>::iterator it = projectiles.begin(); it != projectiles.end();) {
 		if( it->off_screen() ) {
 			reg_bullet temp = *it;
 			it = projectiles.erase(it);
