@@ -1,6 +1,7 @@
 #include <stdio.h>
 //#include <iostream>
 #include <string>
+#include "helper_funcs.h"
 
 extern const GLint WINDOW_HEIGHT;
 extern const GLint WINDOW_WIDTH;
@@ -12,6 +13,9 @@ class reg_bullet {
 		reg_bullet(GLfloat x, GLfloat y, GLint _speed, side _good_bad);
 		void display_bullet(void);
 		void move();
+		bool off_screen();
+		void bullet_print();
+		void reset(GLfloat x, GLfloat y, GLint _speed, side _good_bad);
 	private:
 		GLint speed; //negative or positive depending on direction
 		GLfloat origin[3];
@@ -23,7 +27,6 @@ class reg_bullet {
 		void load_vertices();
 		GLfloat quad[12];
 };
-
 void queue_bullet(reg_bullet _bullet) {
 	;
 }
@@ -35,11 +38,41 @@ void check_enemy_hit(GLfloat[], GLfloat length, GLfloat width) {
 void check_ally_hit(GLfloat[], GLfloat length, GLfloat width) {
 	;
 }
+
+void reg_bullet::reset(GLfloat x, GLfloat y, GLint _speed, side _good_bad) {
+	origin[0] = x;
+	origin[1] = y;
+	speed = _speed;
+	good_bad = _good_bad;
+}
+
+void reg_bullet::bullet_print() {
+	printf("speed = %d\n", speed);
+	printf("origin = %f,%f,%f\n", origin[0],origin[1],origin[2]);
+	printf("length = %f\n", length);
+	printf("width = %f\n", width);
+	if (good_bad == ALLY)
+		printf("good_bad = ALLY\n");
+	else if (good_bad == ENEMY)
+		printf("good_bad = ENEMY\n");
+	else
+		printf("blastid\n");
+}
+
 //give (x, y) position of the middle of the back end of the bullet
 reg_bullet::reg_bullet(GLfloat x, GLfloat y, GLint _speed, side _good_bad):
 	speed(_speed), origin{x, y+length/2, 0.0}, good_bad(_good_bad) 
 {
 	load_vertices();
+}
+
+bool reg_bullet::off_screen() {
+	if (good_bad == ALLY && (origin[1]+length/2) > WINDOW_HEIGHT) 
+		return true;
+	else if (good_bad == ENEMY && (origin[1]-length/2) <= 0) 
+		return true;
+	else
+		return false;
 }
 
 void reg_bullet::load_vertices() {
@@ -53,19 +86,37 @@ void reg_bullet::load_vertices() {
 }
 
 void reg_bullet::move() {
+	/*if(good_bad == ALLY)
+		printf("beginning: ALLY bullet\n");
+	else if (good_bad == ENEMY)
+		printf("beginning: ENEMY bullet\n");
+	else
+		printf("bollocks bullet\n\n");
+	*/
+	
 	origin[1] += speed;
-	printf("New origin.y is %f\n", origin[1]);
+	//printf("New origin.y is %f\n", origin[1]);
 	if (good_bad == ALLY && (origin[1]+length/2) <= WINDOW_HEIGHT) {
+		//printf("check1\n");
 		check_enemy_hit(origin, length, width);
 	}
 	else if (good_bad == ALLY) {//past window_height
+		//printf("check2\n");
 		exists = false;
 		queue_bullet(*this);
 	}
 	else if (good_bad == ENEMY && (origin[1]-length/2) <= 0) {
+		//printf("check3\n");
 		check_ally_hit(origin, length, width);
 	}
 	else {//if (good_bad == ENEMY) and past bottom of window
+		//printf("check4\n");
+		if(good_bad == ALLY)
+			;//printf("end: ALLY\n");
+		else if (good_bad == ENEMY)
+			;//printf("end: ENEMY\n");
+		else
+			;//printf("bollocks\n\n");
 		exists = false;
 		queue_bullet(*this);
 	}

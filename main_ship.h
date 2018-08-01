@@ -87,13 +87,13 @@ void main_ship::move(std::string direction) {
 		if (get_origin(0) + get_width()/2 + get_speed() <= WINDOW_WIDTH)
 			set_origin(0, get_origin(0)+get_speed());
 			//get_origin(0) += get_speed();
-		printf("New origin.x is %f\n", get_origin(0));
+		//printf("New origin.x is %f\n", get_origin(0));
 	}
 	else if (direction == "left") {
 		if (get_origin(0) - get_width()/2 - get_speed() >= 0)
 			set_origin(0, get_origin(0)-get_speed());
 			//get_origin(0) -= speed;
-		printf("New origin.x is %f\n", get_origin(0));
+		//printf("New origin.x is %f\n", get_origin(0));
 	}
 	else if (direction == "up") {
 		;
