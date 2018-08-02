@@ -15,7 +15,7 @@ void reshape(int w, int h) {
 }
 
 //vector <space_ship*> all_ships;
-main_ship sonic(WINDOW_WIDTH/2, 50, 1);
+main_ship sonic(WINDOW_WIDTH/2, 50, 1, 5);
 std::vector<reg_bullet> projectiles;
 std::vector<reg_bullet> graveyard;
 reg_bullet bully(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 20, ALLY);
