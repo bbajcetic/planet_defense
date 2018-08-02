@@ -1,5 +1,5 @@
 #include <iostream>
-#include "bullet.h"
+#include "projectile.h"
 #include "constants.h"
 
 

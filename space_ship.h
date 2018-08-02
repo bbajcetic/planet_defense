@@ -1,5 +1,5 @@
-#ifndef MAIN_SHIP_H
-#define MAIN_SHIP_H
+#ifndef SPACE_SHIP_H
+#define SPACE_SHIP_H
 
 #include <GL/glew.h>
 #include <GL/glut.h>

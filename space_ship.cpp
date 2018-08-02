@@ -1,5 +1,5 @@
 #include <iostream>
-#include "main_ship.h"
+#include "space_ship.h"
 #include "constants.h"
 
 space_ship::space_ship(GLfloat x, GLfloat y, GLint size, GLint speed): 

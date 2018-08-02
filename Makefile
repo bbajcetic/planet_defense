@@ -1,7 +1,7 @@
 
 CC=-lglut -lGLU -lGL -lGLEW
-main: planet_main.cpp main_ship.cpp bullet.cpp main_ship.h bullet.h
-	g++ -o planet_main.o planet_main.cpp main_ship.cpp bullet.cpp $(CC)
+main: planet_main.cpp space_ship.cpp projectile.cpp space_ship.h projectile.h
+	g++ -o planet_main.o planet_main.cpp space_ship.cpp projectile.cpp $(CC)
 
 clean: 
 	rm planet_main.o

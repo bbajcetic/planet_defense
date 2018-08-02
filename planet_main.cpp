@@ -1,8 +1,8 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "constants.h"
-#include "main_ship.h"
-#include "bullet.h"
+#include "space_ship.h"
+#include "projectile.h"
 #include <vector>
 #include <iostream>
 

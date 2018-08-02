@@ -1,5 +1,5 @@
-#ifndef BULLET_H
-#define BULLET_H
+#ifndef PROJECTILE_H
+#define PROJECTILE_H
 
 #include <GL/glew.h>
 #include <GL/glut.h>
