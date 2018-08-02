@@ -1,6 +1,6 @@
 #include <iostream>
-#include <string>
 #include "bullet.h"
+#include "constants.h"
 
 
 void queue_bullet(reg_bullet _bullet) {

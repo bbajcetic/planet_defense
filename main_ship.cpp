@@ -1,10 +1,16 @@
 #include <iostream>
-#include <string>
 #include "main_ship.h"
+#include "constants.h"
 
 space_ship::space_ship(GLfloat x, GLfloat y, GLint size, GLint speed): 
 	speed(speed), length(4*size * 6), width(4*size * 8), 
 	origin {x, y, 0.0}, health(100) {}
+
+main_ship::main_ship(GLfloat x, GLfloat y, GLint size, GLint speed): 
+	space_ship(x, y, size, speed) 
+{
+	load_vertices();
+}
 
 void main_ship::load_vertices() {
 	GLfloat x = get_origin(0);
@@ -35,14 +41,10 @@ void main_ship::move(std::string direction) {
 	if (direction == "right") {
 		if (get_origin(0) + get_width()/2 + get_speed() <= WINDOW_WIDTH)
 			set_origin(0, get_origin(0)+get_speed());
-			//get_origin(0) += get_speed();
-		//printf("New origin.x is %f\n", get_origin(0));
 	}
 	else if (direction == "left") {
 		if (get_origin(0) - get_width()/2 - get_speed() >= 0)
 			set_origin(0, get_origin(0)-get_speed());
-			//get_origin(0) -= speed;
-		//printf("New origin.x is %f\n", get_origin(0));
 	}
 	else if (direction == "up") {
 		;
@@ -51,25 +53,21 @@ void main_ship::move(std::string direction) {
 		;
 	}
 	else //error
-		;
+		std::cout << "ERROR IN MOVEMENT" << std::endl;
+
 	load_vertices();
 }
 void main_ship::shrink() {
 	set_width(get_width()/2);
-	//width /= 2;
 	set_length(get_length()/2);
-	//length /= 2;
 	set_origin(1, get_origin(1) - get_length()/2);
-	//origin[1] = origin[1] - length/2;
 }
 
 void main_ship::grow() {
+	//move origin forward so that ship doesn't move below screen
 	set_origin(1, get_origin(1) + get_length()/2);
-	//origin[1] = origin[1] + length/2; //move origin forward so that ship doesn't move below screen
 	set_length(get_length()*2);
-	//length *= 2;
 	set_width(get_width()*2);
-	//width *= 2;
 }
 
 void main_ship::display_ship(void) {
@@ -77,12 +75,5 @@ void main_ship::display_ship(void) {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, triangles);
 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei) 24);
-	//glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-main_ship::main_ship(GLfloat x, GLfloat y, GLint size, GLint speed): 
-	space_ship(x, y, size, speed) 
-	//speed(5), length(4*size * 6), width(4*size * 8),origin {x, y, 0.0}, health(100) 
-{
-	load_vertices();
-}

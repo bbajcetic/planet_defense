@@ -3,9 +3,7 @@
 
 #include <GL/glew.h>
 #include <GL/glut.h>
-
-extern const GLint WINDOW_HEIGHT;
-extern const GLint WINDOW_WIDTH;
+#include <string>
 
 enum side {ALLY, ENEMY};
 

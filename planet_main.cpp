@@ -1,25 +1,22 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
+#include "constants.h"
 #include "main_ship.h"
 #include "bullet.h"
 #include <vector>
-//#include <list>
+#include <iostream>
 
-const GLint WINDOW_HEIGHT = 500;
-const GLint WINDOW_WIDTH = 500;
+//vector <space_ship*> all_ships;
+main_ship sonic(MAIN_SHIP_X, MAIN_SHIP_Y, MAIN_SHIP_SIZE, MAIN_SHIP_SPEED);
+std::vector<reg_bullet> projectiles;
+std::vector<reg_bullet> graveyard;
+
 void reshape(int w, int h) {
 	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
 }
-
-//vector <space_ship*> all_ships;
-main_ship sonic(WINDOW_WIDTH/2, 50, 1, 5);
-std::vector<reg_bullet> projectiles;
-std::vector<reg_bullet> graveyard;
-reg_bullet bully(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 20, ALLY);
-//width/2 b/c start in middle of screen
 void game_on(void) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	sonic.display_ship();
@@ -34,19 +31,19 @@ void press_special(int key, int x, int y) {
 	switch(key) {
 		case GLUT_KEY_RIGHT:
 			sonic.move("right");
-			printf("Key right is pressed\n");
+			std::cout << "Key right is pressed\n";
 			break;
 		case GLUT_KEY_LEFT:
 			sonic.move("left");
-			printf("Key left is pressed\n");
+			std::cout << "Key left is pressed\n";
 			break;
 		case GLUT_KEY_UP:
 			sonic.move("up");
-			printf("Key up is pressed\n");
+			std::cout << "Key up is pressed\n";
 			break;
 		case GLUT_KEY_DOWN:
 			sonic.move("down");
-			printf("Key down is pressed\n");
+			std::cout << "Key down is pressed\n";
 			break;
 		default:
 			break;
@@ -67,7 +64,7 @@ void press_keys(unsigned char key, int x, int y) {
 				temp.reset(sonic.get_origin(0), 
 						sonic.get_origin(1)+sonic.get_length()/2, 5, ALLY);
 				projectiles.push_back(temp);
-				printf("GRAVEYARD BULLET\n");
+				std::cout << "GRAVEYARD BULLET\n";
 			}
 			break;
 		default:
@@ -94,8 +91,8 @@ void idle_func(void) {
 int main(int argc, char **argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowSize(500, 500);
-	glutInitWindowPosition(200, 100);
+	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	glutInitWindowPosition(WINDOW_POS_X, WINDOW_POS_Y);
 	glutCreateWindow("*** PLANET DEFENSE ***");
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glutReshapeFunc(reshape);
