@@ -8,7 +8,6 @@
 class space_ship {
 	public:
 		space_ship(GLfloat x, GLfloat y, GLint size, GLint speed);
-		void display_ship(void);
 		//getter functions
 		GLfloat get_origin(int coor) { return origin[coor]; }
 		GLfloat get_length() { return length; }
@@ -16,7 +15,9 @@ class space_ship {
 		GLint get_health() { return health; }
 		GLint get_speed() { return speed; }
 		//setter functions
-		GLfloat set_origin(int coor, GLfloat new_val) 
+		void set_origin(GLfloat valx, GLfloat valy, GLfloat valz)
+		{ origin[0] = valx; origin[1] = valy; origin[2] = valz; }
+		void set_origin(int coor, GLfloat new_val) 
 			{ origin[coor] = new_val; }
 		void set_length(GLfloat new_length) 
 			{ length = new_length; }

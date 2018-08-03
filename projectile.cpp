@@ -1,7 +1,8 @@
 #include <iostream>
 #include "projectile.h"
 #include "constants.h"
-
+const GLint reg_bullet_length = 8;
+const GLint reg_bullet_width = 2;
 
 void queue_bullet(reg_bullet _bullet) {
 	;
@@ -15,16 +16,22 @@ void check_ally_hit(GLfloat[], GLfloat length, GLfloat width) {
 	;
 }
 
-reg_bullet::reg_bullet(GLfloat x, GLfloat y, GLint speed, side good_bad):
-	speed(speed), origin{x, y+length/2, 0.0}, good_bad(good_bad) 
+projectile::projectile(GLfloat x, GLfloat y, GLint speed, good_bad side):
+	speed(speed), side(side) {}
+
+reg_bullet::reg_bullet(GLfloat x, GLfloat y, GLint speed, good_bad side):
+	projectile(x, y, speed, side)
 {
+	set_length(reg_bullet_length);
+	set_width(reg_bullet_width);
+    set_origin(x, y+reg_bullet_length/2, 0.0);
 	load_vertices();
 }
 
 bool reg_bullet::off_screen() {
-	if (good_bad == ALLY && (origin[1]+length/2) > WINDOW_HEIGHT) 
+	if (get_side() == ALLY && (get_origin(1)+get_length()/2) > WINDOW_HEIGHT) 
 		return true;
-	else if (good_bad == ENEMY && (origin[1]-length/2) <= 0) 
+	else if (get_side() == ENEMY && (get_origin(1)-get_length()/2) <= 0) 
 		return true;
 	else
 		return false;
@@ -32,49 +39,40 @@ bool reg_bullet::off_screen() {
 
 void reg_bullet::load_vertices() {
 	GLfloat temp_quad[] = 
-	{origin[0]-width/2, origin[1]+length/2, 0.0, 
-	 origin[0]+width/2, origin[1]+length/2, 0.0, 
-	 origin[0]+width/2, origin[1]-length/2, 0.0, 
-	 origin[0]-width/2, origin[1]-length/2, 0.0};
+	{get_origin(0)-get_width()/2, get_origin(1)+get_length()/2, 0.0, 
+	 get_origin(0)+get_width()/2, get_origin(1)+get_length()/2, 0.0, 
+	 get_origin(0)+get_width()/2, get_origin(1)-get_length()/2, 0.0, 
+	 get_origin(0)-get_width()/2, get_origin(1)-get_length()/2, 0.0};
 	for (int i = 0; i < 12; ++i)
 		quad[i] = temp_quad[i];
 }
 
 void reg_bullet::move() {
-	/*if(good_bad == ALLY)
+	/*if(get_side() == ALLY)
 		printf("beginning: ALLY bullet\n");
-	else if (good_bad == ENEMY)
+	else if (get_side() == ENEMY)
 		printf("beginning: ENEMY bullet\n");
 	else
 		printf("bollocks bullet\n\n");
 	*/
-	
-	origin[1] += speed;
-	//printf("New origin.y is %f\n", origin[1]);
-	if (good_bad == ALLY && (origin[1]+length/2) <= WINDOW_HEIGHT) {
-		//printf("check1\n");
-		check_enemy_hit(origin, length, width);
+	set_origin(1, get_origin(1)+get_speed());
+	if (get_side() == ALLY && (off_screen() == false)) {
+		//check_enemy_hit(origin, get_length(), get_width());
 	}
-	else if (good_bad == ALLY) {//past window_height
-		//printf("check2\n");
+	else if (get_side() == ALLY && (off_screen() == true)) {//above height 
 		exists = false;
 		queue_bullet(*this);
 	}
-	else if (good_bad == ENEMY && (origin[1]-length/2) <= 0) {
-		//printf("check3\n");
-		check_ally_hit(origin, length, width);
+	else if (get_side() == ENEMY && (off_screen() == false)) {
+		//check_ally_hit(origin, get_length(), get_width());
 	}
-	else {//if (good_bad == ENEMY) and past bottom of window
-		//printf("check4\n");
-		if(good_bad == ALLY)
-			;//printf("end: ALLY\n");
-		else if (good_bad == ENEMY)
-			;//printf("end: ENEMY\n");
-		else
-			;//printf("bollocks\n\n");
+	else if (get_side() == ENEMY && (off_screen() == true)) {//below bottom 
 		exists = false;
 		queue_bullet(*this);
 	}
+	else
+	    std::cout << "ERROR: projectile has no good_bad side\n";
+
 	load_vertices();
 }
 
@@ -86,23 +84,23 @@ void reg_bullet::display_bullet(void) {
 	//glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void reg_bullet::reset(GLfloat x, GLfloat y, GLint speed, side good_bad) {
-	origin[0] = x;
-	origin[1] = y;
-	this->speed = speed;
-	this->good_bad = good_bad;
+void reg_bullet::reset(GLfloat x, GLfloat y, GLint speed, good_bad side) {
+	set_origin(0, x);
+	set_origin(1, y);
+	set_speed(speed);
+	set_side(side);
 }
 
 void reg_bullet::bullet_print() {
-	std::cout << "speed = " << speed << std::endl;
-	std::cout << "origin = " << origin[0] << " " << origin[1] 
-		<< " " << origin[2] << std::endl; 
-	std::cout << "length = " << length << std::endl;
-	std::cout << "width = " << width << std::endl;
-	if (good_bad == ALLY)
-		std::cout << "good_bad = ALLY\n";
-	else if (good_bad == ENEMY)
-		std::cout << "good_bad = ENEMY\n";
+	std::cout << "speed = " << get_speed() << std::endl;
+	std::cout << "origin = " << get_origin(0) << " " << get_origin(1)
+		<< " " << get_origin(2) << std::endl; 
+	std::cout << "length = " << get_length() << std::endl;
+	std::cout << "width = " << get_width() << std::endl;
+	if (get_side() == ALLY)
+		std::cout << "side = ALLY\n";
+	else if (get_side() == ENEMY)
+		std::cout << "side = ENEMY\n";
 	else
-		std::cout << "NEITHER\n";
+	    std::cout << "ERROR: projectile has no good_bad side\n";
 }

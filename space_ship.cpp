@@ -2,13 +2,18 @@
 #include "space_ship.h"
 #include "constants.h"
 
+const GLfloat main_ship_health = 100;
+
 space_ship::space_ship(GLfloat x, GLfloat y, GLint size, GLint speed): 
-	speed(speed), length(4*size * 6), width(4*size * 8), 
-	origin {x, y, 0.0}, health(100) {}
+	speed(speed) {}
 
 main_ship::main_ship(GLfloat x, GLfloat y, GLint size, GLint speed): 
 	space_ship(x, y, size, speed) 
 {
+	set_length(4*size*6);
+	set_width(4*size*8);
+	set_origin(x, y, 0.0);
+	set_health(main_ship_health);
 	load_vertices();
 }
 
