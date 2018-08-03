@@ -8,6 +8,7 @@
 
 //vector <space_ship*> all_ships;
 main_ship sonic(MAIN_SHIP_X, MAIN_SHIP_Y, MAIN_SHIP_SIZE, MAIN_SHIP_SPEED);
+enemy_ship enemy(MAIN_SHIP_X+100, MAIN_SHIP_Y+100, MAIN_SHIP_SIZE, MAIN_SHIP_SPEED);
 std::vector<reg_bullet> projectiles;
 std::vector<reg_bullet> graveyard;
 
@@ -20,6 +21,7 @@ void reshape(int w, int h) {
 void game_on(void) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	sonic.display_ship();
+	enemy.display_ship();
 	for (int i = 0; i < projectiles.size(); ++i)
 		projectiles[i].display_bullet();
 	//bully.display_bullet();

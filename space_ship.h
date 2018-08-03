@@ -47,14 +47,15 @@ class main_ship : public space_ship {
 	    GLfloat triangles[72];
 };
 
-/*class enemy_ship : public space_ship {
+class enemy_ship : public space_ship {
 	public:
 		enemy_ship(GLfloat x, GLfloat y, GLint size, GLint speed);
 		void display_ship(void); 
 		void move(std::string direction);
 	private:
 		void load_vertices();
-	    GLfloat triangles[72];
-};*/
+	    GLfloat triangles[27]; 
+		GLfloat quads[36];
+};
 
 #endif
