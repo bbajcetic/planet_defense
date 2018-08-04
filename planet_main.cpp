@@ -63,6 +63,10 @@ void press_keys(unsigned char key, int x, int y) {
 		case ' ':
 			sonic.shoot();
 			break;
+		case 'q':
+			if(glutGetModifiers()) //alt+q exits game 
+				exit(0);
+				break;
 		default:
 			break;
 	}
