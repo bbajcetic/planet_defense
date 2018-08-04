@@ -53,6 +53,7 @@ class enemy_ship : public space_ship {
 		enemy_ship(GLfloat x, GLfloat y, GLint size, GLint speed);
 		void display_ship(void); 
 		void move(bool change);
+		void shoot();
 		GLint get_direction() { return direction; }
 		void set_direction(GLint new_direction) 
 			{ direction = new_direction; }

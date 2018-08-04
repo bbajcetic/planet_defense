@@ -17,7 +17,7 @@ const GLint MAIN_SHIP_SPEED = 5;
 //starting variables for enemy ship
 const GLint ENEMY_SHIP_SIZE = 1;
 const GLint ENEMY_SHIP_SPEED = 3;
-const GLint ENEMY_SHIP_MOVE_LENGTH = 20;
+const GLint ENEMY_SHIP_MOVE_LENGTH = 25;
 const GLint BOTTOM_ENEMY_SPACE = 150;
 
 //starting variables for reg_bullet

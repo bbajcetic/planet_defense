@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 //#include <ctime>
+#include "globals.h"
 #include "constants.h"
 #include "space_ship.h"
 #include "projectile.h"
@@ -60,19 +61,7 @@ void press_special(int key, int x, int y) {
 void press_keys(unsigned char key, int x, int y) {
 	switch(key) {
 		case ' ':
-			if ( graveyard.empty() ) {
-				reg_bullet temp(sonic.get_origin(0), 
-						sonic.get_origin(1)+sonic.get_length()/2, ALLY);
-				projectiles.push_back(temp);
-			}
-			else {
-				reg_bullet temp = *graveyard.begin();
-				graveyard.erase(graveyard.begin());
-				temp.reset(sonic.get_origin(0), 
-						sonic.get_origin(1)+sonic.get_length()/2, ALLY);
-				projectiles.push_back(temp);
-				std::cout << "GRAVEYARD BULLET\n";
-			}
+			sonic.shoot();
 			break;
 		default:
 			break;
@@ -83,10 +72,13 @@ void press_keys(unsigned char key, int x, int y) {
 void idle_func(void) {
 	++frame_count;
 	for (int i = 0; i < enemies.size(); ++i)
-		if (frame_count % ENEMY_SHIP_MOVE_LENGTH == 0)
+		if (frame_count % ENEMY_SHIP_MOVE_LENGTH == 0) {
 			enemies[i].move(true);
-	    else
+			enemies[i].shoot();
+		}
+	    else {
 			enemies[i].move(false);
+		}
 	for(std::vector<reg_bullet>::iterator it = projectiles.begin(); it != projectiles.end();) {
 		if( it->off_screen() ) {
 			reg_bullet temp = *it;

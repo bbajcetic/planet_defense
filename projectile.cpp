@@ -15,14 +15,22 @@ void check_ally_hit(GLfloat[], GLfloat length, GLfloat width) {
 }
 
 projectile::projectile(GLfloat x, GLfloat y, good_bad side):
-	speed(REG_BULLET_SPEED), side(side) {}
+	side(side) {}
 
 reg_bullet::reg_bullet(GLfloat x, GLfloat y, good_bad side):
 	projectile(x, y, side)
 {
 	set_length(REG_BULLET_LENGTH);
 	set_width(REG_BULLET_WIDTH);
-    set_origin(x, y+REG_BULLET_LENGTH/2, 0.0);
+	if (side == ALLY) {
+    	set_origin(x, y+REG_BULLET_LENGTH/2, 0.0);
+		set_speed(REG_BULLET_SPEED);
+	}
+	else if (side == ENEMY) {
+    	set_origin(x, y-REG_BULLET_LENGTH/2, 0.0);
+		set_speed(-REG_BULLET_SPEED);
+	}
+
 	load_vertices();
 }
 
@@ -59,14 +67,12 @@ void reg_bullet::move() {
 	}
 	else if (get_side() == ALLY && (off_screen() == true)) {//above height 
 		exists = false;
-		queue_bullet(*this);
 	}
 	else if (get_side() == ENEMY && (off_screen() == false)) {
 		//check_ally_hit(origin, get_length(), get_width());
 	}
 	else if (get_side() == ENEMY && (off_screen() == true)) {//below bottom 
 		exists = false;
-		queue_bullet(*this);
 	}
 	else
 	    std::cout << "ERROR: projectile has no good_bad side\n";
@@ -85,7 +91,10 @@ void reg_bullet::display_bullet(void) {
 void reg_bullet::reset(GLfloat x, GLfloat y, good_bad side) {
 	set_origin(0, x);
 	set_origin(1, y);
-	set_speed(REG_BULLET_SPEED);
+	if (side == ALLY)
+		set_speed(REG_BULLET_SPEED);
+	else if (side == ENEMY)
+		set_speed(-REG_BULLET_SPEED);
 	set_side(side);
 }
 
