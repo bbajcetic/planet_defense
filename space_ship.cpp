@@ -1,4 +1,5 @@
 #include <iostream>
+//#include <ctime>
 #include "space_ship.h"
 #include "constants.h"
 
@@ -86,7 +87,7 @@ void main_ship::display_ship(void) {
 
 //enemy_ship class functions
 enemy_ship::enemy_ship(GLfloat x, GLfloat y, GLint size, GLint speed): 
-	space_ship(x, y, size, speed) 
+	space_ship(x, y, size, speed), direction(0)
 {
 	set_length(4*size*4);
 	set_width(4*size*8);
@@ -123,20 +124,40 @@ void enemy_ship::load_vertices() {
 		quads[i] = temp_quads[i];
 }
 
-void enemy_ship::move(std::string direction) {
-	if (direction == "right") {
+void enemy_ship::move(bool change) {
+	if (change)	
+		set_direction(rand()%4);
+	if (direction == 0) { //go right
 		if (get_origin(0) + get_width()/2 + get_speed() <= WINDOW_WIDTH)
 			set_origin(0, get_origin(0)+get_speed());
+		else {
+			set_origin(0, get_origin(0)-get_speed());
+			set_direction(1);
+		}
 	}
-	else if (direction == "left") {
+	else if (direction == 1) { //go left
 		if (get_origin(0) - get_width()/2 - get_speed() >= 0)
 			set_origin(0, get_origin(0)-get_speed());
+		else {
+			set_origin(0, get_origin(0)+get_speed());
+			set_direction(0);
+		}
 	}
-	else if (direction == "up") {
-		;
+	else if (direction == 2) { //go up
+		if (get_origin(1) + get_length()/2 + get_speed() <= WINDOW_HEIGHT)
+			set_origin(1, get_origin(1)+get_speed());
+		else {
+			set_origin(1, get_origin(1)-get_speed());
+			set_direction(3);
+		}
 	}
-	else if (direction == "down") {
-		;
+	else if (direction == 3) { //go down
+		if (get_origin(1) - get_length()/2 - get_speed() >= BOTTOM_ENEMY_SPACE)
+			set_origin(1, get_origin(1)-get_speed());
+		else {
+			set_origin(1, get_origin(1)+get_speed());
+			set_direction(2);
+		}
 	}
 	else //error
 		std::cout << "ERROR IN MOVEMENT" << std::endl;

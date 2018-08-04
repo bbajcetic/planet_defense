@@ -9,7 +9,7 @@ enum good_bad {ALLY, ENEMY}; //0 = ALLY, 1 = ENEMY
 
 class projectile {
 	public:
-		projectile(GLfloat x, GLfloat y, GLint speed, good_bad side);
+		projectile(GLfloat x, GLfloat y, good_bad side);
 		//getter functions
 		GLfloat get_origin(int coor) { return origin[coor]; }
 		GLfloat get_length() { return length; }
@@ -40,12 +40,12 @@ class projectile {
 
 class reg_bullet : public projectile {
 	public:
-		reg_bullet(GLfloat x, GLfloat y, GLint speed, good_bad side);
+		reg_bullet(GLfloat x, GLfloat y, good_bad side);
 		void display_bullet(void);
 		void move();
 		bool off_screen();
 		void bullet_print();
-		void reset(GLfloat x, GLfloat y, GLint speed, good_bad side);
+		void reset(GLfloat x, GLfloat y, good_bad side);
 	private:
 		GLfloat triangles[2];
 		bool exists = true;

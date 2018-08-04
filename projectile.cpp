@@ -1,8 +1,6 @@
 #include <iostream>
 #include "projectile.h"
 #include "constants.h"
-const GLint reg_bullet_length = 8;
-const GLint reg_bullet_width = 2;
 
 void queue_bullet(reg_bullet _bullet) {
 	;
@@ -16,15 +14,15 @@ void check_ally_hit(GLfloat[], GLfloat length, GLfloat width) {
 	;
 }
 
-projectile::projectile(GLfloat x, GLfloat y, GLint speed, good_bad side):
-	speed(speed), side(side) {}
+projectile::projectile(GLfloat x, GLfloat y, good_bad side):
+	speed(REG_BULLET_SPEED), side(side) {}
 
-reg_bullet::reg_bullet(GLfloat x, GLfloat y, GLint speed, good_bad side):
-	projectile(x, y, speed, side)
+reg_bullet::reg_bullet(GLfloat x, GLfloat y, good_bad side):
+	projectile(x, y, side)
 {
-	set_length(reg_bullet_length);
-	set_width(reg_bullet_width);
-    set_origin(x, y+reg_bullet_length/2, 0.0);
+	set_length(REG_BULLET_LENGTH);
+	set_width(REG_BULLET_WIDTH);
+    set_origin(x, y+REG_BULLET_LENGTH/2, 0.0);
 	load_vertices();
 }
 
@@ -84,10 +82,10 @@ void reg_bullet::display_bullet(void) {
 	//glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void reg_bullet::reset(GLfloat x, GLfloat y, GLint speed, good_bad side) {
+void reg_bullet::reset(GLfloat x, GLfloat y, good_bad side) {
 	set_origin(0, x);
 	set_origin(1, y);
-	set_speed(speed);
+	set_speed(REG_BULLET_SPEED);
 	set_side(side);
 }
 

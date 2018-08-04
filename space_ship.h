@@ -40,6 +40,7 @@ class main_ship : public space_ship {
 		main_ship(GLfloat x, GLfloat y, GLint size, GLint speed);
 		void display_ship(void); 
 		void move(std::string direction);
+		void shoot();
 	private:
 		void grow();
 		void shrink();
@@ -51,8 +52,12 @@ class enemy_ship : public space_ship {
 	public:
 		enemy_ship(GLfloat x, GLfloat y, GLint size, GLint speed);
 		void display_ship(void); 
-		void move(std::string direction);
+		void move(bool change);
+		GLint get_direction() { return direction; }
+		void set_direction(GLint new_direction) 
+			{ direction = new_direction; }
 	private:
+		int direction;
 		void load_vertices();
 	    GLfloat triangles[27]; 
 		GLfloat quads[36];
