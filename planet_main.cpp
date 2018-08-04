@@ -36,21 +36,23 @@ void game_on(void) {
 	glFlush();
 }
 void press_special(int key, int x, int y) {
+	if (GLUT_KEY_RIGHT || GLUT_KEY_LEFT || GLUT_KEY_UP || GLUT_KEY_DOWN)
+		sonic.set_is_moving(true);
 	switch(key) {
 		case GLUT_KEY_RIGHT:
-			sonic.move("right");
+			sonic.set_direction(1);
 			std::cout << "Key right is pressed\n";
 			break;
 		case GLUT_KEY_LEFT:
-			sonic.move("left");
+			sonic.set_direction(3);
 			std::cout << "Key left is pressed\n";
 			break;
 		case GLUT_KEY_UP:
-			sonic.move("up");
+			sonic.set_direction(0);
 			std::cout << "Key up is pressed\n";
 			break;
 		case GLUT_KEY_DOWN:
-			sonic.move("down");
+			sonic.set_direction(2);
 			std::cout << "Key down is pressed\n";
 			break;
 		default:
@@ -58,6 +60,15 @@ void press_special(int key, int x, int y) {
 	}
 	glutPostRedisplay();
 }
+void release_special(int key, int x, int y) {
+	//if (GLUT_KEY_RIGHT || GLUT_KEY_LEFT || GLUT_KEY_UP || GLUT_KEY_DOWN)
+	if (GLUT_KEY_RIGHT && sonic.get_direction() == 1)
+		sonic.set_is_moving(false);
+	if (GLUT_KEY_LEFT && sonic.get_direction() == 3)
+		sonic.set_is_moving(false);
+	glutPostRedisplay();
+}
+
 void press_keys(unsigned char key, int x, int y) {
 	switch(key) {
 		case ' ':
@@ -75,6 +86,8 @@ void press_keys(unsigned char key, int x, int y) {
 //idle_func: check collisions-> move bullets-> move ships
 void idle_func(void) {
 	++frame_count;
+	if(sonic.get_is_moving() == true)
+		sonic.move();
 	for (int i = 0; i < enemies.size(); ++i)
 		if (frame_count % ENEMY_SHIP_MOVE_LENGTH == 0) {
 			enemies[i].move(true);
@@ -109,6 +122,7 @@ int main(int argc, char **argv) {
 	glutReshapeFunc(reshape);
 	glutSpecialFunc(press_special);
 	glutKeyboardFunc(press_keys);
+	glutSpecialUpFunc(release_special);
 	glutIdleFunc(idle_func);
 	glutDisplayFunc(game_on);
 

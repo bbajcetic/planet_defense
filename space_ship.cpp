@@ -12,7 +12,7 @@ space_ship::space_ship(GLfloat x, GLfloat y, GLint size, GLint speed):
 
 //main_ship class functions
 main_ship::main_ship(GLfloat x, GLfloat y, GLint size, GLint speed): 
-	space_ship(x, y, size, speed) 
+	space_ship(x, y, size, speed), direction(0), is_moving(false)
 {
 	set_length(4*size*6);
 	set_width(4*size*8);
@@ -46,19 +46,19 @@ void main_ship::load_vertices() {
 		triangles[i] = temp_triangles[i];
 }
 
-void main_ship::move(std::string direction) {
-	if (direction == "right") {
+void main_ship::move() {
+	if (get_direction() == 1) {
 		if (get_origin(0) + get_width()/2 + get_speed() <= WINDOW_WIDTH)
 			set_origin(0, get_origin(0)+get_speed());
 	}
-	else if (direction == "left") {
+	else if (get_direction() == 3) {
 		if (get_origin(0) - get_width()/2 - get_speed() >= 0)
 			set_origin(0, get_origin(0)-get_speed());
 	}
-	else if (direction == "up") {
+	else if (get_direction() == 0) {
 		;
 	}
-	else if (direction == "down") {
+	else if (get_direction() == 2) {
 		;
 	}
 	else //error
@@ -145,36 +145,36 @@ void enemy_ship::load_vertices() {
 void enemy_ship::move(bool change) {
 	if (change)	
 		set_direction(rand()%4);
-	if (direction == 0) { //go right
+	if (get_direction() == 1) { //go right
 		if (get_origin(0) + get_width()/2 + get_speed() <= WINDOW_WIDTH)
 			set_origin(0, get_origin(0)+get_speed());
 		else {
 			set_origin(0, get_origin(0)-get_speed());
-			set_direction(1);
+			set_direction(3);
 		}
 	}
-	else if (direction == 1) { //go left
+	else if (get_direction() == 3) { //go left
 		if (get_origin(0) - get_width()/2 - get_speed() >= 0)
 			set_origin(0, get_origin(0)-get_speed());
 		else {
 			set_origin(0, get_origin(0)+get_speed());
-			set_direction(0);
+			set_direction(1);
 		}
 	}
-	else if (direction == 2) { //go up
+	else if (get_direction() == 0) { //go up
 		if (get_origin(1) + get_length()/2 + get_speed() <= WINDOW_HEIGHT)
 			set_origin(1, get_origin(1)+get_speed());
 		else {
 			set_origin(1, get_origin(1)-get_speed());
-			set_direction(3);
+			set_direction(2);
 		}
 	}
-	else if (direction == 3) { //go down
+	else if (get_direction() == 2) { //go down
 		if (get_origin(1) - get_length()/2 - get_speed() >= BOTTOM_ENEMY_SPACE)
 			set_origin(1, get_origin(1)-get_speed());
 		else {
 			set_origin(1, get_origin(1)+get_speed());
-			set_direction(2);
+			set_direction(0);
 		}
 	}
 	else //error

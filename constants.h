@@ -12,7 +12,7 @@ const GLint WINDOW_POS_Y = 100;
 const GLfloat MAIN_SHIP_X = WINDOW_WIDTH/2;
 const GLfloat MAIN_SHIP_Y = 100;
 const GLint MAIN_SHIP_SIZE = 1;
-const GLint MAIN_SHIP_SPEED = 5;
+const GLint MAIN_SHIP_SPEED = 3;
 
 //starting variables for enemy ship
 const GLint ENEMY_SHIP_SIZE = 1;

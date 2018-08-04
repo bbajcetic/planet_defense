@@ -39,9 +39,17 @@ class main_ship : public space_ship {
     public:
 		main_ship(GLfloat x, GLfloat y, GLint size, GLint speed);
 		void display_ship(void); 
-		void move(std::string direction);
+		void move();
 		void shoot();
+		bool get_is_moving() { return is_moving; }
+		int get_direction() { return direction; }
+		void set_is_moving(bool new_is_moving) 
+			{ is_moving = new_is_moving; }
+		void set_direction(int new_direction) 
+			{ direction = new_direction; }
 	private:
+		bool is_moving;
+		int direction;
 		void grow();
 		void shrink();
 		void load_vertices();
@@ -54,8 +62,8 @@ class enemy_ship : public space_ship {
 		void display_ship(void); 
 		void move(bool change);
 		void shoot();
-		GLint get_direction() { return direction; }
-		void set_direction(GLint new_direction) 
+		int get_direction() { return direction; }
+		void set_direction(int new_direction) 
 			{ direction = new_direction; }
 	private:
 		int direction;
