@@ -1,4 +1,5 @@
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <GL/glut.h>
 //#include <ctime>
 #include "globals.h"
@@ -26,10 +27,10 @@ void reshape(int w, int h) {
 void game_on(void) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	sonic.display_ship();
-	for (int i = 0; i < enemies.size(); ++i)
+	for (unsigned int i = 0; i < enemies.size(); ++i)
 		enemies[i].display_ship();
 	//enemy.display_ship();
-	for (int i = 0; i < projectiles.size(); ++i)
+	for (unsigned int i = 0; i < projectiles.size(); ++i)
 		projectiles[i].display_bullet();
 
 	glutSwapBuffers();
@@ -77,7 +78,7 @@ void press_keys(unsigned char key, int x, int y) {
 		case 'q':
 			if(glutGetModifiers()) //alt+q exits game 
 				exit(0);
-				break;
+			break;
 		default:
 			break;
 	}
@@ -88,7 +89,7 @@ void idle_func(void) {
 	++frame_count;
 	if(sonic.get_is_moving() == true)
 		sonic.move();
-	for (int i = 0; i < enemies.size(); ++i)
+	for (unsigned int i = 0; i < enemies.size(); ++i)
 		if (frame_count % ENEMY_SHIP_MOVE_LENGTH == 0) {
 			enemies[i].move(true);
 			enemies[i].shoot();

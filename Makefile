@@ -1,7 +1,17 @@
 
-CC=-lglut -lGLU -lGL -lGLEW
-main: planet_main.cpp space_ship.cpp projectile.cpp space_ship.h projectile.h constants.h globals.h
-	g++ -o planet_main.o planet_main.cpp space_ship.cpp projectile.cpp $(CC)
+CC = g++
+LIBS=-lglut -lGLU -lGL -lGLEW
+CFLAGS = -g -Wall -Wno-deprecated
+
+planet_defense: planet_main.cpp space_ship.cpp projectile.cpp space_ship.h projectile.h constants.h globals.h
+	$(CC) $(CFLAGS) -o $@ planet_main.cpp space_ship.cpp projectile.cpp $(LIBS)
+
+#sample: sample.o
+#	$(CC) $(CFLAGS) -o $@ $< $(LIBS)
+#
+#%.o:%.cpp
+#	$(CC) $(CFLAGS) -c $<
+
 
 clean: 
-	rm planet_main.o
+	rm -f *.o *~ planet_defense

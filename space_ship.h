@@ -48,8 +48,8 @@ class main_ship : public space_ship {
 		void set_direction(int new_direction) 
 			{ direction = new_direction; }
 	private:
-		bool is_moving;
 		int direction;
+		bool is_moving;
 		void grow();
 		void shrink();
 		void load_vertices();
