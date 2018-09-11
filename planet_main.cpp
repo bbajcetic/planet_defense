@@ -7,6 +7,7 @@
 #include "space_ship.h"
 #include "projectile.h"
 #include <vector>
+#include <map>
 #include <iostream>
 
 
@@ -34,33 +35,33 @@ void quit(GLFWwindow *wd)
 	exit(0);
 }
 void press_special(GLFWwindow* wd, int key, int scancode,int action,int mods) {
-	//if (action == GLFW_RELEASE) { // function is called first on GLFW_PRESS.
-	//  return;
-	//}
-	
-	if (action == GLFW_RELEASE)
-		sonic.set_is_moving(false);
-	else if (action == GLFW_PRESS || action == GLFW_REPEAT)
+	std::map<int, int> arrows = { {262, 1}, {263, 3}, {264, 2}, {265, 0} };
+	if (action == GLFW_RELEASE) {
+		if (arrows[key] == sonic.get_direction())
+			sonic.set_is_moving(false);
+		return;
+	}
+	else if (action == GLFW_PRESS || action == GLFW_REPEAT) {
 		sonic.set_is_moving(true);
-
-	if (key == GLFW_KEY_ESCAPE) {
-		quit(wd);
-	}
-	else if (key == GLFW_KEY_UP) {
-		sonic.set_direction(0);
-		std::cout << "Key up is pressed\n";
-	}
-	else if (key == GLFW_KEY_RIGHT) {
-		sonic.set_direction(1);
-		std::cout << "Key right is pressed\n";
-	}
-	else if (key == GLFW_KEY_DOWN) {
-		sonic.set_direction(2);
-		std::cout << "Key down is pressed\n";
-	}
-	else if (key == GLFW_KEY_LEFT) {
-		sonic.set_direction(3);
-		std::cout << "Key left is pressed\n";
+		if (key == GLFW_KEY_ESCAPE) {
+			quit(wd);
+		}
+		else if (key == GLFW_KEY_UP) {
+			sonic.set_direction(arrows[key]);
+			std::cout << "Key up is pressed\n";
+		}
+		else if (key == GLFW_KEY_RIGHT) {
+			sonic.set_direction(arrows[key]);
+			std::cout << "Key right is pressed\n";
+		}
+		else if (key == GLFW_KEY_DOWN) {
+			sonic.set_direction(arrows[key]);
+			std::cout << "Key down is pressed\n";
+		}
+		else if (key == GLFW_KEY_LEFT) {
+			sonic.set_direction(arrows[key]);
+			std::cout << "Key left is pressed\n";
+		}
 	}
 	return;
 }
