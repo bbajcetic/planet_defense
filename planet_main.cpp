@@ -10,6 +10,8 @@
 #include <iostream>
 
 
+GLFWwindow* wd; //window desciptor/handle
+
 int frame_count = 0;
 //vector <space_ship*> all_ships;
 main_ship sonic(MAIN_SHIP_X, MAIN_SHIP_Y, MAIN_SHIP_SIZE, MAIN_SHIP_SPEED);
@@ -18,72 +20,64 @@ std::vector<enemy_ship> enemies;
 std::vector<reg_bullet> projectiles;
 std::vector<reg_bullet> graveyard;
 
-void reshape(int w, int h) {
-	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
-}
 void game_on(void) {
-	glClear(GL_COLOR_BUFFER_BIT);
 	sonic.display_ship();
 	for (unsigned int i = 0; i < enemies.size(); ++i)
 		enemies[i].display_ship();
-	//enemy.display_ship();
 	for (unsigned int i = 0; i < projectiles.size(); ++i)
 		projectiles[i].display_bullet();
-
-	glutSwapBuffers();
-	glFlush();
 }
-void press_special(int key, int x, int y) {
-	if (GLUT_KEY_RIGHT || GLUT_KEY_LEFT || GLUT_KEY_UP || GLUT_KEY_DOWN)
+void quit(GLFWwindow *wd)
+{
+	glfwDestroyWindow(wd);
+	glfwTerminate();
+	exit(0);
+}
+void press_special(GLFWwindow* wd, int key, int scancode,int action,int mods) {
+	//if (action == GLFW_RELEASE) { // function is called first on GLFW_PRESS.
+	//  return;
+	//}
+	
+	if (action == GLFW_RELEASE)
+		sonic.set_is_moving(false);
+	else if (action == GLFW_PRESS || action == GLFW_REPEAT)
 		sonic.set_is_moving(true);
-	switch(key) {
-		case GLUT_KEY_RIGHT:
-			sonic.set_direction(1);
-			std::cout << "Key right is pressed\n";
-			break;
-		case GLUT_KEY_LEFT:
-			sonic.set_direction(3);
-			std::cout << "Key left is pressed\n";
-			break;
-		case GLUT_KEY_UP:
-			sonic.set_direction(0);
-			std::cout << "Key up is pressed\n";
-			break;
-		case GLUT_KEY_DOWN:
-			sonic.set_direction(2);
-			std::cout << "Key down is pressed\n";
-			break;
-		default:
-			break;
+
+	if (key == GLFW_KEY_ESCAPE) {
+		quit(wd);
 	}
-	glutPostRedisplay();
-}
-void release_special(int key, int x, int y) {
-	//if (GLUT_KEY_RIGHT || GLUT_KEY_LEFT || GLUT_KEY_UP || GLUT_KEY_DOWN)
-	if (GLUT_KEY_RIGHT && sonic.get_direction() == 1)
-		sonic.set_is_moving(false);
-	if (GLUT_KEY_LEFT && sonic.get_direction() == 3)
-		sonic.set_is_moving(false);
-	glutPostRedisplay();
+	else if (key == GLFW_KEY_UP) {
+		sonic.set_direction(0);
+		std::cout << "Key up is pressed\n";
+	}
+	else if (key == GLFW_KEY_RIGHT) {
+		sonic.set_direction(1);
+		std::cout << "Key right is pressed\n";
+	}
+	else if (key == GLFW_KEY_DOWN) {
+		sonic.set_direction(2);
+		std::cout << "Key down is pressed\n";
+	}
+	else if (key == GLFW_KEY_LEFT) {
+		sonic.set_direction(3);
+		std::cout << "Key left is pressed\n";
+	}
+	return;
 }
 
-void press_keys(unsigned char key, int x, int y) {
+void press_keys(GLFWwindow* wd, unsigned int key) {
 	switch(key) {
 		case ' ':
 			sonic.shoot();
 			break;
 		case 'q':
-			if(glutGetModifiers()) //alt+q exits game 
-				exit(0);
+			quit(wd);
 			break;
 		default:
 			break;
 	}
-	glutPostRedisplay();
 }
+
 //idle_func: check collisions-> move bullets-> move ships
 void idle_func(void) {
 	++frame_count;
@@ -108,28 +102,55 @@ void idle_func(void) {
 			++it;
 		}
 	}
+}
 
-	glutPostRedisplay();
+void err(int errcode, const char* desc)
+{
+	fprintf(stderr, "%d: %s\n", errcode, desc);
+	return;
 }
 
 int main(int argc, char **argv) {
 	srand(time(NULL));
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	glutInitWindowPosition(WINDOW_POS_X, WINDOW_POS_Y);
-	glutCreateWindow("*** PLANET DEFENSE ***");
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glutReshapeFunc(reshape);
-	glutSpecialFunc(press_special);
-	glutKeyboardFunc(press_keys);
-	glutSpecialUpFunc(release_special);
-	glutIdleFunc(idle_func);
-	glutDisplayFunc(game_on);
+	glfwSetErrorCallback(err);
+	if (!glfwInit()) exit(1);
+	wd = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, 
+						"*** PLANET DEFENSE ***", NULL, NULL);
+	if (!wd) { //in case glfwCreateWindow function fails
+	  glfwTerminate();
+	  exit(1); }
+	glfwSetWindowPos(wd, WINDOW_POS_X, WINDOW_POS_Y);
 
+	int fbwidth, fbheight; //framebuffer width and height
+	glfwGetFramebufferSize(wd, &fbwidth, &fbheight);
+	glfwMakeContextCurrent(wd);
+	glViewport(0, 0, (GLsizei) fbwidth, (GLsizei) fbheight);
+	//glfwSetFramebufferSizeCallback(wd, reshape); //don't think I need this
+	//glfwSetWindowCloseCallback(wd, quit);
+	glfwSetKeyCallback(wd, press_special); //general keyboard input
+	glfwSetCharCallback(wd, press_keys); //specific character handling
 	enemies.push_back(enemy);
-	
-	glutMainLoop();
+	do { //game loop (like DisplayFunc callback in GLUT)
+		//glClearColor(1.0f, 0.0f, 1.0f, 0.0f);
+		//glfwGetFramebufferSize(wd, &fbwidth, &fbheight);
+		//glViewport(0, 0, (GLsizei) fbwidth, (GLsizei) fbheight);
+		
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glMatrixMode( GL_PROJECTION );
+        glLoadIdentity();
+        glOrtho(0.0, WINDOW_WIDTH, 0.0, WINDOW_HEIGHT, -1.0, 1.0);
+
+        glMatrixMode( GL_MODELVIEW );
+        glLoadIdentity();
+
+		idle_func();
+		game_on();
+		glfwSwapBuffers(wd);
+		glfwPollEvents();
+	} while (!glfwWindowShouldClose(wd));
+	glfwTerminate();
 
 	return 0;
 }
