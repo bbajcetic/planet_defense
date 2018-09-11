@@ -41,8 +41,11 @@ void press_special(GLFWwindow* wd, int key, int scancode,int action,int mods) {
 			sonic.set_is_moving(false);
 		return;
 	}
-	else if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+	if ( 	(arrows.find(key) != arrows.end() ) 	&& 
+			(action == GLFW_PRESS || action == GLFW_REPEAT)	)
 		sonic.set_is_moving(true);
+
+	if (action == GLFW_PRESS || action == GLFW_REPEAT) {
 		if (key == GLFW_KEY_ESCAPE) {
 			quit(wd);
 		}
