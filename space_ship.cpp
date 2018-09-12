@@ -199,6 +199,24 @@ void enemy_ship::shoot() {
 	}
 }
 
+hit_box main_ship::get_hit_box() {
+	hit_box hb;
+	hb.left_x = get_origin(0) - get_width()*3/4;
+	hb.right_x = get_origin(0) + get_width()*3/4;
+	hb.bottom_y = get_origin(1) - get_length()*2/3;
+	hb.top_y = get_origin(1) + get_length()*2/3;
+	return hb;
+}
+
+hit_box enemy_ship::get_hit_box() {
+	hit_box hb;
+	hb.left_x = get_origin(0) - get_width()*3/4;
+	hb.right_x = get_origin(0) + get_width()*3/4;
+	hb.bottom_y = get_origin(1) - get_length()/4;
+	hb.top_y = get_origin(1) + get_length()/4;
+	return hb;
+}
+
 void enemy_ship::display_ship(void) {
 	glColor3f(0.7, 0.7, 0.7);
 	glEnableClientState(GL_VERTEX_ARRAY);

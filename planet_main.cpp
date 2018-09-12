@@ -5,6 +5,7 @@
 #include "globals.h"
 #include "constants.h"
 #include "space_ship.h"
+#include "structs.h"
 #include "projectile.h"
 #include <vector>
 #include <map>
@@ -20,6 +21,14 @@ enemy_ship enemy(MAIN_SHIP_X+100, MAIN_SHIP_Y+100, ENEMY_SHIP_SIZE, ENEMY_SHIP_S
 std::vector<enemy_ship> enemies;
 std::vector<reg_bullet> projectiles;
 std::vector<reg_bullet> graveyard;
+
+bool check_collision(hit_box bullet_hb, hit_box ship_hb) {
+	bool condition1 = bullet_hb.left_x <= ship_hb.right_x;
+	bool condition2 = bullet_hb.right_x >= ship_hb.left_x;
+	bool condition3 = bullet_hb.bottom_y <= ship_hb.top_y;
+	bool condition4 = bullet_hb.top_y >= ship_hb.bottom_y;
+	return (condition1 && condition2 && condition3 && condition4);
+}
 
 void game_on(void) {
 	sonic.display_ship();
@@ -76,7 +85,7 @@ void idle_func(void) {
 	++frame_count;
 	if(sonic.get_arrow_state(sonic.get_last(0)) == true)
 		sonic.move();
-	for (unsigned int i = 0; i < enemies.size(); ++i)
+	for (unsigned int i = 0; i < enemies.size(); ++i) {
 		if (frame_count % ENEMY_SHIP_MOVE_LENGTH == 0) {
 			enemies[i].move(true);
 			enemies[i].shoot();
@@ -84,7 +93,24 @@ void idle_func(void) {
 	    else {
 			enemies[i].move(false);
 		}
+	}
 	for(std::vector<reg_bullet>::iterator it = projectiles.begin(); it != projectiles.end();) {
+		if (it->get_side() == ALLY) {
+			for (unsigned int i = 0; i < enemies.size(); ++i) {
+				hit_box bullet_hb = it->get_hit_box();
+				hit_box ship_hb = enemies[i].get_hit_box();
+				bool is_collision = check_collision(bullet_hb, ship_hb);
+				if (is_collision)
+					std::cout << "ENEMY HIT!!!\n";
+			}
+		}
+		else if (it->get_side() == ENEMY) {
+			hit_box bullet_hb = it->get_hit_box();
+			hit_box ship_hb = sonic.get_hit_box();
+			bool is_collision = check_collision(bullet_hb, ship_hb);
+			if (is_collision)
+				std::cout << "SONIC HIT!!!\n";
+		}
 		if( it->off_screen() ) {
 			reg_bullet temp = *it;
 			it = projectiles.erase(it);

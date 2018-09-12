@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <string>
+#include "structs.h"
 
 enum good_bad {ALLY, ENEMY}; //0 = ALLY, 1 = ENEMY
 
@@ -42,6 +43,7 @@ class reg_bullet : public projectile {
 	public:
 		reg_bullet(GLfloat x, GLfloat y, good_bad side);
 		void display_bullet(void);
+		hit_box get_hit_box();
 		void move();
 		bool off_screen();
 		void bullet_print();

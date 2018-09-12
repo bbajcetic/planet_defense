@@ -43,6 +43,16 @@ bool reg_bullet::off_screen() {
 		return false;
 }
 
+hit_box reg_bullet::get_hit_box() {
+	hit_box hb;
+	hb.left_x = get_origin(0) - get_width()/2;
+	hb.right_x = get_origin(0) + get_width()/2;
+	hb.bottom_y = get_origin(1) - get_length()/2;
+	hb.top_y = get_origin(1) + get_length()/2;
+	return hb;
+}
+
+
 void reg_bullet::load_vertices() {
 	GLfloat temp_quad[] = 
 	{get_origin(0)-get_width()/2, get_origin(1)+get_length()/2, 0.0, 
