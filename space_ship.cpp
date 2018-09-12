@@ -12,7 +12,7 @@ space_ship::space_ship(GLfloat x, GLfloat y, GLint size, GLint speed):
 
 //main_ship class functions
 main_ship::main_ship(GLfloat x, GLfloat y, GLint size, GLint speed): 
-	space_ship(x, y, size, speed), direction(0), is_moving(false)
+	space_ship(x, y, size, speed), direction(0)
 {
 	set_length(4*size*6);
 	set_width(4*size*8);

@@ -36,35 +36,24 @@ void quit(GLFWwindow *wd)
 }
 void press_special(GLFWwindow* wd, int key, int scancode,int action,int mods) {
 	std::map<int, int> arrows = { {262, 1}, {263, 3}, {264, 2}, {265, 0} };
-	if (action == GLFW_RELEASE) {
-		if (arrows[key] == sonic.get_direction())
-			sonic.set_is_moving(false);
-		return;
+	std::map<int, std::string> directions = { {0, "north"}, {1, "east"}, {2, "south"}, {3, "west"} };
+	if (arrows.find(key) != arrows.end()) {
+		if (action == GLFW_PRESS) {
+			sonic.set_last(arrows[key]);
+			sonic.set_direction(arrows[key]);
+			sonic.set_arrow_state(arrows[key], true);
+			std::cout << "Key " << directions[arrows[key]] << " is pressed\n";
+		}
+		else if (action == GLFW_RELEASE) {
+			sonic.set_arrow_state(arrows[key], false);
+			if (sonic.get_last(0) == arrows[key]) {
+				sonic.set_direction(sonic.get_last(1));
+				sonic.set_last(sonic.get_last(1));
+			}
+		}
 	}
-	if ( 	(arrows.find(key) != arrows.end() ) 	&& 
-			(action == GLFW_PRESS || action == GLFW_REPEAT)	)
-		sonic.set_is_moving(true);
-
-	if (action == GLFW_PRESS || action == GLFW_REPEAT) {
-		if (key == GLFW_KEY_ESCAPE) {
-			quit(wd);
-		}
-		else if (key == GLFW_KEY_UP) {
-			sonic.set_direction(arrows[key]);
-			std::cout << "Key up is pressed\n";
-		}
-		else if (key == GLFW_KEY_RIGHT) {
-			sonic.set_direction(arrows[key]);
-			std::cout << "Key right is pressed\n";
-		}
-		else if (key == GLFW_KEY_DOWN) {
-			sonic.set_direction(arrows[key]);
-			std::cout << "Key down is pressed\n";
-		}
-		else if (key == GLFW_KEY_LEFT) {
-			sonic.set_direction(arrows[key]);
-			std::cout << "Key left is pressed\n";
-		}
+	else if (key == GLFW_KEY_ESCAPE) {
+		quit(wd);
 	}
 	return;
 }
@@ -85,7 +74,7 @@ void press_keys(GLFWwindow* wd, unsigned int key) {
 //idle_func: check collisions-> move bullets-> move ships
 void idle_func(void) {
 	++frame_count;
-	if(sonic.get_is_moving() == true)
+	if(sonic.get_arrow_state(sonic.get_last(0)) == true)
 		sonic.move();
 	for (unsigned int i = 0; i < enemies.size(); ++i)
 		if (frame_count % ENEMY_SHIP_MOVE_LENGTH == 0) {

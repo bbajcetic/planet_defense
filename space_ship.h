@@ -41,15 +41,20 @@ class main_ship : public space_ship {
 		void display_ship(void); 
 		void move();
 		void shoot();
-		bool get_is_moving() { return is_moving; }
+		bool get_arrow_state(int dir) { return arrow_state[dir]; }
+		int get_last(int spot) 
+			{ return last_pressed[spot]; }
 		int get_direction() { return direction; }
-		void set_is_moving(bool new_is_moving) 
-			{ is_moving = new_is_moving; }
+		void set_arrow_state(int dir, bool pressed) 
+			{ arrow_state[dir] = pressed; }
+		void set_last(int dir) //spot: 0=last, 1=second last
+			{ last_pressed[1] = last_pressed[0]; last_pressed[0] = dir; }
 		void set_direction(int new_direction) 
 			{ direction = new_direction; }
 	private:
 		int direction;
-		bool is_moving;
+		bool arrow_state[4] = {0, 0, 0, 0}; //north, east, south, west
+		int last_pressed[2] = {0, 0}; // 0,1,2,3 = north,east,south,west
 		void grow();
 		void shrink();
 		void load_vertices();
