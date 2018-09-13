@@ -20,7 +20,6 @@ main_ship sonic(MAIN_SHIP_X, MAIN_SHIP_Y, MAIN_SHIP_SIZE, MAIN_SHIP_SPEED);
 enemy_ship enemy(MAIN_SHIP_X+100, MAIN_SHIP_Y+100, ENEMY_SHIP_SIZE, ENEMY_SHIP_SPEED);
 std::vector<enemy_ship> enemies;
 std::vector<reg_bullet> projectiles;
-std::vector<reg_bullet> graveyard;
 
 bool check_collision(hit_box bullet_hb, hit_box ship_hb) {
 	bool condition1 = bullet_hb.left_x <= ship_hb.right_x;
@@ -102,9 +101,7 @@ void idle_func(void) {
 				bool is_collision = check_collision(bullet_hb, ship_hb);
 				if (is_collision) {
 					std::cout << "ENEMY HIT!!!\n";
-					reg_bullet temp = *it;
 					it = projectiles.erase(it);
-					graveyard.push_back(temp);
 					continue;
 				}
 			}
@@ -115,16 +112,12 @@ void idle_func(void) {
 			bool is_collision = check_collision(bullet_hb, ship_hb);
 			if (is_collision) {
 				std::cout << "SONIC HIT!!!\n";
-				reg_bullet temp = *it;
 				it = projectiles.erase(it);
-				graveyard.push_back(temp);
 				continue;
 			}
 		}
 		if( it->off_screen() ) {
-			reg_bullet temp = *it;
 			it = projectiles.erase(it);
-			graveyard.push_back(temp);
 		}
 		else {
 			it->move();

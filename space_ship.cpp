@@ -68,19 +68,9 @@ void main_ship::move() {
 }
 
 void main_ship::shoot() {
-	if ( graveyard.empty() ) {
-		reg_bullet temp(get_origin(0), 
-				get_origin(1)+get_length()/2, ALLY);
-		projectiles.push_back(temp);
-	}
-	else {
-		reg_bullet temp = *graveyard.begin();
-		graveyard.erase(graveyard.begin());
-		temp.reset(get_origin(0), 
-				get_origin(1)+get_length()/2, ALLY);
-		projectiles.push_back(temp);
-		std::cout << "GRAVEYARD BULLET\n";
-	}
+	reg_bullet temp(get_origin(0), 
+			get_origin(1)+get_length()/2, ALLY);
+	projectiles.push_back(temp);
 }
 
 void main_ship::shrink() {
@@ -184,19 +174,9 @@ void enemy_ship::move(bool change) {
 }
 
 void enemy_ship::shoot() {
-	if ( graveyard.empty() ) {
-		reg_bullet temp(get_origin(0), 
-				get_origin(1)-get_length()/2, ENEMY);
-		projectiles.push_back(temp);
-	}
-	else {
-		reg_bullet temp = *graveyard.begin();
-		graveyard.erase(graveyard.begin());
-		temp.reset(get_origin(0), 
-				get_origin(1)-get_length()/2, ENEMY);
-		projectiles.push_back(temp);
-		std::cout << "GRAVEYARD BULLET\n";
-	}
+	reg_bullet temp(get_origin(0), 
+			get_origin(1)-get_length()/2, ENEMY);
+	projectiles.push_back(temp);
 }
 
 hit_box main_ship::get_hit_box() {
