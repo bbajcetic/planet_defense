@@ -100,16 +100,26 @@ void idle_func(void) {
 				hit_box bullet_hb = it->get_hit_box();
 				hit_box ship_hb = enemies[i].get_hit_box();
 				bool is_collision = check_collision(bullet_hb, ship_hb);
-				if (is_collision)
+				if (is_collision) {
 					std::cout << "ENEMY HIT!!!\n";
+					reg_bullet temp = *it;
+					it = projectiles.erase(it);
+					graveyard.push_back(temp);
+					continue;
+				}
 			}
 		}
 		else if (it->get_side() == ENEMY) {
 			hit_box bullet_hb = it->get_hit_box();
 			hit_box ship_hb = sonic.get_hit_box();
 			bool is_collision = check_collision(bullet_hb, ship_hb);
-			if (is_collision)
+			if (is_collision) {
 				std::cout << "SONIC HIT!!!\n";
+				reg_bullet temp = *it;
+				it = projectiles.erase(it);
+				graveyard.push_back(temp);
+				continue;
+			}
 		}
 		if( it->off_screen() ) {
 			reg_bullet temp = *it;
