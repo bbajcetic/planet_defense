@@ -63,23 +63,10 @@ void press_special(GLFWwindow* wd, int key, int scancode,int action,int mods) {
 	else if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
 		sonic.shoot();
 	}
-	else if (key == GLFW_KEY_ESCAPE) {
+	else if (key == GLFW_KEY_ESCAPE || key == GLFW_KEY_Q) {
 		quit(wd);
 	}
 	return;
-}
-
-void press_keys(GLFWwindow* wd, unsigned int key) {
-	switch(key) {
-		case ' ':
-			//sonic.shoot();
-			break;
-		case 'q':
-			quit(wd);
-			break;
-		default:
-			break;
-	}
 }
 
 //idle_func: check collisions-> move bullets-> move ships
@@ -153,7 +140,6 @@ int main(int argc, char **argv) {
 	//glfwSetFramebufferSizeCallback(wd, reshape); //don't think I need this
 	//glfwSetWindowCloseCallback(wd, quit);
 	glfwSetKeyCallback(wd, press_special); //general keyboard input
-	glfwSetCharCallback(wd, press_keys); //specific character handling
 	enemies.push_back(enemy);
 	do { //game loop (like DisplayFunc callback in GLUT)
 		//glClearColor(1.0f, 0.0f, 1.0f, 0.0f);
