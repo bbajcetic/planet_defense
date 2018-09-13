@@ -60,6 +60,9 @@ void press_special(GLFWwindow* wd, int key, int scancode,int action,int mods) {
 			}
 		}
 	}
+	else if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+		sonic.shoot();
+	}
 	else if (key == GLFW_KEY_ESCAPE) {
 		quit(wd);
 	}
@@ -69,7 +72,7 @@ void press_special(GLFWwindow* wd, int key, int scancode,int action,int mods) {
 void press_keys(GLFWwindow* wd, unsigned int key) {
 	switch(key) {
 		case ' ':
-			sonic.shoot();
+			//sonic.shoot();
 			break;
 		case 'q':
 			quit(wd);
