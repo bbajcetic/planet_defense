@@ -10,10 +10,13 @@
 #include <vector>
 #include <map>
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 
 GLFWwindow* wd; //window desciptor/handle
 bool game_over = false;
+GLint score = 0;
 GLint frame_count = 0;
 //vector <space_ship*> all_ships;
 main_ship sonic(MAIN_SHIP_X, MAIN_SHIP_Y, MAIN_SHIP_SIZE, MAIN_SHIP_SPEED);
@@ -57,7 +60,7 @@ void press_special(GLFWwindow* wd, int key, int scancode,int action,int mods) {
 			sonic.set_last(arrows[key]);
 			sonic.set_direction(arrows[key]);
 			sonic.set_arrow_state(arrows[key], true);
-			std::cout << "Key " << directions[arrows[key]] << " is pressed\n";
+			//std::cout << "Key " << directions[arrows[key]] << " pressed\n";
 		}
 		else if (action == GLFW_RELEASE) {
 			sonic.set_arrow_state(arrows[key], false);
@@ -78,9 +81,15 @@ void press_special(GLFWwindow* wd, int key, int scancode,int action,int mods) {
 
 //idle_func: check collisions-> move bullets-> move ships
 void idle_func(void) {
+	if (frame_count % FRAMES_PER_SEC == 0)
+		sonic.update_ammo();
 	if (frame_count % SPAWN_RATE == 0) {
-		enemy_ship enemy(MAIN_SHIP_X+100, MAIN_SHIP_Y+100, ENEMY_SHIP_SIZE, ENEMY_SHIP_SPEED);
-		enemies.push_back(enemy);
+		if (enemies.size() <= MAX_NUM_ENEMIES) {
+			GLint start_y = rand()%(TOP_ENEMY_SPACE-BOTTOM_ENEMY_SPACE) + BOTTOM_ENEMY_SPACE;
+			GLint start_x = rand()%(WINDOW_WIDTH);
+			enemy_ship enemy(start_x, start_y, ENEMY_SHIP_SIZE, ENEMY_SHIP_SPEED);
+			enemies.push_back(enemy);
+		}
 	}
 	if(sonic.get_arrow_state(sonic.get_last(0)) == true)
 		sonic.move();
@@ -113,6 +122,7 @@ void idle_func(void) {
 					bullet_destroyed = true;
 					if (enemy_dead == true) {
 						it2 = enemies.erase(it2);
+						score += ENEMY_POINTS;
 						std::cout << "ENEMY DESTROYED!\n";
 					}
 					break; //in case enemies overlap, can only kill one
@@ -133,6 +143,7 @@ void idle_func(void) {
 				if (sonic_dead == true) {
 					game_over = true;
 					std::cout << "GAME OVER!\n";
+					std::cout << "\nSCORE = " << score << "\n\n";
 				}
 				//break; when looping though allies; //in case enemies overlap, can only kill one
 			}
