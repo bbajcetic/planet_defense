@@ -75,6 +75,10 @@ void main_ship::shoot() {
 void main_ship::get_shot(projectile the_bullet) {
 	set_health(get_health()-the_bullet.get_damage());
 	std::cout << "Sonic health = " << get_health() << std::endl;
+	if (get_health() <= 0) {
+		game_over = true;
+		std::cout << "GAME OVER!\n";
+	}
 }
 
 void main_ship::shrink() {

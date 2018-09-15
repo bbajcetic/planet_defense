@@ -13,7 +13,7 @@
 
 
 GLFWwindow* wd; //window desciptor/handle
-
+bool game_over = false;
 int frame_count = 0;
 //vector <space_ship*> all_ships;
 main_ship sonic(MAIN_SHIP_X, MAIN_SHIP_Y, MAIN_SHIP_SIZE, MAIN_SHIP_SPEED);
@@ -36,6 +36,14 @@ void game_on(void) {
 	for (unsigned int i = 0; i < projectiles.size(); ++i)
 		projectiles[i].display_bullet();
 }
+void end_game(void) {
+	sonic.display_ship();
+	for (unsigned int i = 0; i < enemies.size(); ++i)
+		enemies[i].display_ship();
+	for (unsigned int i = 0; i < projectiles.size(); ++i)
+		projectiles[i].display_bullet();
+}
+
 void quit(GLFWwindow *wd)
 {
 	glfwDestroyWindow(wd);
@@ -71,7 +79,6 @@ void press_special(GLFWwindow* wd, int key, int scancode,int action,int mods) {
 
 //idle_func: check collisions-> move bullets-> move ships
 void idle_func(void) {
-	++frame_count;
 	if(sonic.get_arrow_state(sonic.get_last(0)) == true)
 		sonic.move();
 	for (unsigned int i = 0; i < enemies.size(); ++i) {
@@ -164,8 +171,16 @@ int main(int argc, char **argv) {
         glMatrixMode( GL_MODELVIEW );
         glLoadIdentity();
 
-		idle_func();
-		game_on();
+		++frame_count;
+		if (game_over == false) {
+			idle_func();
+			game_on();
+		}
+		else { //(game_over == true)
+			//display game_over window with game over message and score
+			end_game();
+		}
+
 		glfwSwapBuffers(wd);
 		glfwPollEvents();
 	} while (!glfwWindowShouldClose(wd));
