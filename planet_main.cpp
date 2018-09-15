@@ -105,9 +105,9 @@ void idle_func(void) {
 				bool is_collision = check_collision(bullet_hb, ship_hb);
 				if (is_collision) {
 					std::cout << "Enemy hit!!!\n";
+					bool enemy_dead = it2->get_shot(*it);
 					it = projectiles.erase(it);
 					bullet_destroyed = true;
-					bool enemy_dead = it2->get_shot(*it);
 					if (enemy_dead == true) {
 						it2 = enemies.erase(it2);
 						std::cout << "ENEMY DESTROYED!\n";
@@ -124,9 +124,9 @@ void idle_func(void) {
 			bool is_collision = check_collision(bullet_hb, ship_hb);
 			if (is_collision) {
 				std::cout << "Sonic hit!!!\n";
+				bool sonic_dead = sonic.get_shot(*it);
 				it = projectiles.erase(it);
 				bullet_destroyed = true;
-				bool sonic_dead = sonic.get_shot(*it);
 				if (sonic_dead == true) {
 					game_over = true;
 					std::cout << "GAME OVER!\n";
