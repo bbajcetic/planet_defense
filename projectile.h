@@ -16,6 +16,7 @@ class projectile {
 		GLfloat get_length() { return length; }
 		GLfloat get_width() { return width; }
 		GLint get_speed() { return speed; }
+		GLfloat get_damage() { return damage; }
 		GLint get_side() { return side; }
 		//setter functions
 		void set_origin(GLfloat valx, GLfloat valy, GLfloat valz)
@@ -28,6 +29,8 @@ class projectile {
 			{ width = new_width; }
 		void set_speed(GLint new_speed) 
 			{ speed = new_speed; }
+		void set_damage(GLfloat new_damage) 
+			{ damage = new_damage; }
 		void set_side(good_bad new_side)
 			{ side = new_side;}
 	private:
@@ -35,6 +38,7 @@ class projectile {
 		GLfloat length;
 		GLfloat width;
 		GLint speed; //negative or positive depending on direction
+		GLfloat damage;
 		good_bad side;
 		bool exists = true;
 };

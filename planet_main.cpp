@@ -98,6 +98,7 @@ void idle_func(void) {
 					std::cout << "ENEMY HIT!!!\n";
 					it = projectiles.erase(it);
 					bullet_destroyed = true;
+					enemies[i].get_shot(*it);
 					break; //in case enemies overlap, can only kill one
 				}
 			}
@@ -110,6 +111,7 @@ void idle_func(void) {
 				std::cout << "SONIC HIT!!!\n";
 				it = projectiles.erase(it);
 				bullet_destroyed = true;
+				sonic.get_shot(*it);
 				//break; when looping though allies; //in case enemies overlap, can only kill one
 			}
 		}

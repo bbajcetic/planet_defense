@@ -22,6 +22,7 @@ reg_bullet::reg_bullet(GLfloat x, GLfloat y, good_bad side):
 {
 	set_length(REG_BULLET_LENGTH);
 	set_width(REG_BULLET_WIDTH);
+	set_damage(REG_BULLET_DAMAGE);
 	if (side == ALLY) {
     	set_origin(x, y+REG_BULLET_LENGTH/2, 0.0);
 		set_speed(REG_BULLET_SPEED);

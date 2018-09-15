@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <string>
+#include "projectile.h"
 #include "structs.h"
 
 class space_ship {
@@ -13,7 +14,7 @@ class space_ship {
 		GLfloat get_origin(int coor) { return origin[coor]; }
 		GLfloat get_length() { return length; }
 		GLfloat get_width() { return width; }
-		GLint get_health() { return health; }
+		GLfloat get_health() { return health; }
 		GLint get_speed() { return speed; }
 		//setter functions
 		void set_origin(GLfloat valx, GLfloat valy, GLfloat valz)
@@ -24,7 +25,7 @@ class space_ship {
 			{ length = new_length; }
 		void set_width(GLfloat new_width) 
 			{ width = new_width; }
-		void set_health(GLint new_health) 
+		void set_health(GLfloat new_health) 
 			{ health = new_health; }
 		void set_speed(GLint new_speed) 
 			{ speed = new_speed; }
@@ -42,6 +43,7 @@ class main_ship : public space_ship {
 		void display_ship(void); 
 		void move();
 		void shoot();
+		void get_shot(projectile the_bullet);
 		hit_box get_hit_box();
 		bool get_arrow_state(int dir) { return arrow_state[dir]; }
 		int get_last(int spot) 
@@ -69,6 +71,7 @@ class enemy_ship : public space_ship {
 		void display_ship(void); 
 		void move(bool change);
 		void shoot();
+		void get_shot(projectile the_bullet);
 		hit_box get_hit_box();
 		int get_direction() { return direction; }
 		void set_direction(int new_direction) 

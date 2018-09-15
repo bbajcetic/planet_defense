@@ -4,9 +4,6 @@
 #include "globals.h"
 #include "constants.h"
 
-const GLfloat main_ship_health = 100;
-const GLfloat enemy_ship_health = 25;
-
 space_ship::space_ship(GLfloat x, GLfloat y, GLint size, GLint speed): 
 	speed(speed) {}
 
@@ -17,7 +14,7 @@ main_ship::main_ship(GLfloat x, GLfloat y, GLint size, GLint speed):
 	set_length(4*size*6);
 	set_width(4*size*8);
 	set_origin(x, y, 0.0);
-	set_health(main_ship_health);
+	set_health(MAIN_SHIP_HEALTH);
 	load_vertices();
 }
 
@@ -56,10 +53,12 @@ void main_ship::move() {
 			set_origin(0, get_origin(0)-get_speed());
 	}
 	else if (get_direction() == 0) {
-		;
+		if (get_origin(1)+get_length()/2 + get_speed() <= TOP_ALLY_SPACE)
+			set_origin(1, get_origin(1)+get_speed());
 	}
 	else if (get_direction() == 2) {
-		;
+		if (get_origin(1)-get_length()/2 - get_speed() >= BOTTOM_ALLY_SPACE)
+			set_origin(1, get_origin(1)-get_speed());
 	}
 	else //error
 		std::cout << "ERROR IN MOVEMENT" << std::endl;
@@ -71,6 +70,11 @@ void main_ship::shoot() {
 	reg_bullet temp(get_origin(0), 
 			get_origin(1)+get_length()/2, ALLY);
 	projectiles.push_back(temp);
+}
+
+void main_ship::get_shot(projectile the_bullet) {
+	set_health(get_health()-the_bullet.get_damage());
+	std::cout << "Sonic health = " << get_health() << std::endl;
 }
 
 void main_ship::shrink() {
@@ -100,7 +104,7 @@ enemy_ship::enemy_ship(GLfloat x, GLfloat y, GLint size, GLint speed):
 	set_length(4*size*4);
 	set_width(4*size*8);
 	set_origin(x, y, 0.0);
-	set_health(enemy_ship_health);
+	set_health(ENEMY_SHIP_HEALTH);
 	load_vertices();
 }
 
@@ -177,6 +181,11 @@ void enemy_ship::shoot() {
 	reg_bullet temp(get_origin(0), 
 			get_origin(1)-get_length()/2, ENEMY);
 	projectiles.push_back(temp);
+}
+
+void enemy_ship::get_shot(projectile the_bullet) {
+	set_health(get_health()-the_bullet.get_damage());
+	std::cout << "Enemy health = " << get_health() << std::endl;
 }
 
 hit_box main_ship::get_hit_box() {
