@@ -42,6 +42,7 @@ class main_ship : public space_ship {
 		main_ship(GLfloat x, GLfloat y, GLint size, GLint speed);
 		void display_ship(void); 
 		void move();
+		void update_ammo();
 		void shoot();
 		bool get_shot(projectile the_bullet);
 		hit_box get_hit_box();
@@ -49,16 +50,24 @@ class main_ship : public space_ship {
 		int get_last(int spot) 
 			{ return last_pressed[spot]; }
 		int get_direction() { return direction; }
+		int get_ammo() { return ammo; }
+		int get_max_ammo() { return max_ammo; }
 		void set_arrow_state(int dir, bool pressed) 
 			{ arrow_state[dir] = pressed; }
 		void set_last(int dir) //spot: 0=last, 1=second last
 			{ last_pressed[1] = last_pressed[0]; last_pressed[0] = dir; }
 		void set_direction(int new_direction) 
 			{ direction = new_direction; }
+		void set_ammo(int new_ammo)
+			{ ammo = new_ammo; }
+		void set_max_ammo(int new_max_ammo)
+			{ max_ammo = new_max_ammo; }
 	private:
 		int direction;
 		bool arrow_state[4] = {0, 0, 0, 0}; //north, east, south, west
 		int last_pressed[2] = {0, 0}; // 0,1,2,3 = north,east,south,west
+		int ammo;
+		int max_ammo;
 		void grow();
 		void shrink();
 		void load_vertices();

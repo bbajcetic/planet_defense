@@ -51,7 +51,6 @@ class reg_bullet : public projectile {
 		void move();
 		bool off_screen();
 		void bullet_print();
-		void reset(GLfloat x, GLfloat y, good_bad side);
 	private:
 		GLfloat triangles[2];
 		bool exists = true;

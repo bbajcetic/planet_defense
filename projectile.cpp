@@ -25,11 +25,11 @@ reg_bullet::reg_bullet(GLfloat x, GLfloat y, good_bad side):
 	set_damage(REG_BULLET_DAMAGE);
 	if (side == ALLY) {
     	set_origin(x, y+REG_BULLET_LENGTH/2, 0.0);
-		set_speed(REG_BULLET_SPEED);
+		set_speed(ALLY_BULLET_SPEED);
 	}
 	else if (side == ENEMY) {
     	set_origin(x, y-REG_BULLET_LENGTH/2, 0.0);
-		set_speed(-REG_BULLET_SPEED);
+		set_speed(-ENEMY_BULLET_SPEED);
 	}
 
 	load_vertices();
@@ -97,16 +97,6 @@ void reg_bullet::display_bullet(void) {
 	glVertexPointer(3, GL_FLOAT, 0, quad);
 	glDrawArrays(GL_QUADS, 0, (GLsizei) 4);
 	//glDisableClientState(GL_VERTEX_ARRAY);
-}
-
-void reg_bullet::reset(GLfloat x, GLfloat y, good_bad side) {
-	set_origin(0, x);
-	set_origin(1, y);
-	if (side == ALLY)
-		set_speed(REG_BULLET_SPEED);
-	else if (side == ENEMY)
-		set_speed(-REG_BULLET_SPEED);
-	set_side(side);
 }
 
 void reg_bullet::bullet_print() {

@@ -9,7 +9,8 @@ space_ship::space_ship(GLfloat x, GLfloat y, GLint size, GLint speed):
 
 //main_ship class functions
 main_ship::main_ship(GLfloat x, GLfloat y, GLint size, GLint speed): 
-	space_ship(x, y, size, speed), direction(0)
+	space_ship(x, y, size, speed), direction(0), ammo(MAIN_SHIP_START_AMMO),
+	max_ammo(MAIN_SHIP_INIT_MAX_AMMO)
 {
 	set_length(4*size*6);
 	set_width(4*size*8);
@@ -66,10 +67,24 @@ void main_ship::move() {
 	load_vertices();
 }
 
+void main_ship::update_ammo() {
+	//check if ammo will exceed max_ammo, and if not then add ammo, and if it
+	//will exceed, then make it equal to max
+	if (get_ammo() <= get_max_ammo() - PRJ_PER_SEC)
+		set_ammo(get_ammo() + PRJ_PER_SEC);
+	else
+		set_ammo(get_max_ammo());
+}
+
 void main_ship::shoot() {
-	reg_bullet temp(get_origin(0), 
-			get_origin(1)+get_length()/2, ALLY);
-	projectiles.push_back(temp);
+	if (get_ammo() > 0) {
+		reg_bullet temp(get_origin(0), get_origin(1)+get_length()/2, ALLY);
+		projectiles.push_back(temp);
+		set_ammo(get_ammo()-1);
+	}
+	else {
+		std::cout << "Out of ammunition!\n";
+	}
 }
 
 bool main_ship::get_shot(projectile the_bullet) {
