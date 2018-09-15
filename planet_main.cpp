@@ -84,6 +84,11 @@ void idle_func(void) {
 		}
 	}
 	for(std::vector<reg_bullet>::iterator it = projectiles.begin(); it != projectiles.end();) {
+		bool bullet_destroyed = false;
+		if( it->off_screen() ) {
+			it = projectiles.erase(it);
+			continue;
+		}
 		if (it->get_side() == ALLY) {
 			for (unsigned int i = 0; i < enemies.size(); ++i) {
 				hit_box bullet_hb = it->get_hit_box();
@@ -92,7 +97,8 @@ void idle_func(void) {
 				if (is_collision) {
 					std::cout << "ENEMY HIT!!!\n";
 					it = projectiles.erase(it);
-					continue;
+					bullet_destroyed = true;
+					break; //in case enemies overlap, can only kill one
 				}
 			}
 		}
@@ -103,16 +109,16 @@ void idle_func(void) {
 			if (is_collision) {
 				std::cout << "SONIC HIT!!!\n";
 				it = projectiles.erase(it);
-				continue;
+				bullet_destroyed = true;
+				//break; when looping though allies; //in case enemies overlap, can only kill one
 			}
 		}
-		if( it->off_screen() ) {
-			it = projectiles.erase(it);
+		if (bullet_destroyed == true) {
+			bullet_destroyed = false; //reset for next bullet
+			continue;
 		}
-		else {
-			it->move();
-			++it;
-		}
+		it->move();
+		++it;
 	}
 }
 
