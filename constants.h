@@ -20,8 +20,9 @@ const GLint BOTTOM_ALLY_SPACE = 50;
 //starting variables for enemy ship
 const GLint ENEMY_SHIP_SIZE = 1;
 const GLint ENEMY_SHIP_SPEED = 3;
-const GLfloat ENEMY_SHIP_HEALTH = 25;
+const GLfloat ENEMY_SHIP_HEALTH = 50;
 const GLint ENEMY_SHIP_MOVE_LENGTH = 25;
+const GLint TOP_ENEMY_SPACE = WINDOW_HEIGHT;
 const GLint BOTTOM_ENEMY_SPACE = 150;
 
 //starting variables for reg_bullet

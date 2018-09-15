@@ -90,24 +90,32 @@ void idle_func(void) {
 			enemies[i].move(false);
 		}
 	}
-	for(std::vector<reg_bullet>::iterator it = projectiles.begin(); it != projectiles.end();) {
+	for(std::vector<reg_bullet>::iterator it = projectiles.begin(); 
+										it != projectiles.end();) {
 		bool bullet_destroyed = false;
 		if( it->off_screen() ) {
 			it = projectiles.erase(it);
 			continue;
 		}
 		if (it->get_side() == ALLY) {
-			for (unsigned int i = 0; i < enemies.size(); ++i) {
+			for (std::vector<enemy_ship>::iterator it2 = enemies.begin(); 
+										it2 != enemies.end();) {
 				hit_box bullet_hb = it->get_hit_box();
-				hit_box ship_hb = enemies[i].get_hit_box();
+				hit_box ship_hb = it2->get_hit_box();
 				bool is_collision = check_collision(bullet_hb, ship_hb);
 				if (is_collision) {
-					std::cout << "ENEMY HIT!!!\n";
+					std::cout << "Enemy hit!!!\n";
 					it = projectiles.erase(it);
 					bullet_destroyed = true;
-					enemies[i].get_shot(*it);
+					bool enemy_dead = it2->get_shot(*it);
+					if (enemy_dead == true) {
+						it2 = enemies.erase(it2);
+						std::cout << "ENEMY DESTROYED!\n";
+					}
 					break; //in case enemies overlap, can only kill one
 				}
+				else
+					++it2;
 			}
 		}
 		else if (it->get_side() == ENEMY) {
@@ -115,10 +123,14 @@ void idle_func(void) {
 			hit_box ship_hb = sonic.get_hit_box();
 			bool is_collision = check_collision(bullet_hb, ship_hb);
 			if (is_collision) {
-				std::cout << "SONIC HIT!!!\n";
+				std::cout << "Sonic hit!!!\n";
 				it = projectiles.erase(it);
 				bullet_destroyed = true;
-				sonic.get_shot(*it);
+				bool sonic_dead = sonic.get_shot(*it);
+				if (sonic_dead == true) {
+					game_over = true;
+					std::cout << "GAME OVER!\n";
+				}
 				//break; when looping though allies; //in case enemies overlap, can only kill one
 			}
 		}

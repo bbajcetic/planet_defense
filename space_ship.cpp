@@ -72,13 +72,14 @@ void main_ship::shoot() {
 	projectiles.push_back(temp);
 }
 
-void main_ship::get_shot(projectile the_bullet) {
+bool main_ship::get_shot(projectile the_bullet) {
+	//returns bool indicating whether main_ship is dead or not
 	set_health(get_health()-the_bullet.get_damage());
 	std::cout << "Sonic health = " << get_health() << std::endl;
-	if (get_health() <= 0) {
-		game_over = true;
-		std::cout << "GAME OVER!\n";
-	}
+	if (get_health() <= 0)
+		return true;
+	else
+		return false;
 }
 
 void main_ship::shrink() {
@@ -160,7 +161,7 @@ void enemy_ship::move(bool change) {
 		}
 	}
 	else if (get_direction() == 0) { //go up
-		if (get_origin(1) + get_length()/2 + get_speed() <= WINDOW_HEIGHT)
+		if (get_origin(1) + get_length()/2 + get_speed() <= TOP_ENEMY_SPACE)
 			set_origin(1, get_origin(1)+get_speed());
 		else {
 			set_origin(1, get_origin(1)-get_speed());
@@ -187,9 +188,14 @@ void enemy_ship::shoot() {
 	projectiles.push_back(temp);
 }
 
-void enemy_ship::get_shot(projectile the_bullet) {
+bool enemy_ship::get_shot(projectile the_bullet) {
+	//returns bool indicating whether main_ship is dead or not
 	set_health(get_health()-the_bullet.get_damage());
 	std::cout << "Enemy health = " << get_health() << std::endl;
+	if (get_health() <= 0)
+		return true;
+	else
+		return false;
 }
 
 hit_box main_ship::get_hit_box() {

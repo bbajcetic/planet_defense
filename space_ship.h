@@ -43,7 +43,7 @@ class main_ship : public space_ship {
 		void display_ship(void); 
 		void move();
 		void shoot();
-		void get_shot(projectile the_bullet);
+		bool get_shot(projectile the_bullet);
 		hit_box get_hit_box();
 		bool get_arrow_state(int dir) { return arrow_state[dir]; }
 		int get_last(int spot) 
@@ -71,7 +71,7 @@ class enemy_ship : public space_ship {
 		void display_ship(void); 
 		void move(bool change);
 		void shoot();
-		void get_shot(projectile the_bullet);
+		bool get_shot(projectile the_bullet);
 		hit_box get_hit_box();
 		int get_direction() { return direction; }
 		void set_direction(int new_direction) 
