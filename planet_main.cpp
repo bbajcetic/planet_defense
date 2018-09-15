@@ -14,10 +14,9 @@
 
 GLFWwindow* wd; //window desciptor/handle
 bool game_over = false;
-int frame_count = 0;
+GLint frame_count = 0;
 //vector <space_ship*> all_ships;
 main_ship sonic(MAIN_SHIP_X, MAIN_SHIP_Y, MAIN_SHIP_SIZE, MAIN_SHIP_SPEED);
-enemy_ship enemy(MAIN_SHIP_X+100, MAIN_SHIP_Y+100, ENEMY_SHIP_SIZE, ENEMY_SHIP_SPEED);
 std::vector<enemy_ship> enemies;
 std::vector<reg_bullet> projectiles;
 
@@ -79,6 +78,10 @@ void press_special(GLFWwindow* wd, int key, int scancode,int action,int mods) {
 
 //idle_func: check collisions-> move bullets-> move ships
 void idle_func(void) {
+	if (frame_count % SPAWN_RATE == 0) {
+		enemy_ship enemy(MAIN_SHIP_X+100, MAIN_SHIP_Y+100, ENEMY_SHIP_SIZE, ENEMY_SHIP_SPEED);
+		enemies.push_back(enemy);
+	}
 	if(sonic.get_arrow_state(sonic.get_last(0)) == true)
 		sonic.move();
 	for (unsigned int i = 0; i < enemies.size(); ++i) {
@@ -160,14 +163,13 @@ int main(int argc, char **argv) {
 	  exit(1); }
 	glfwSetWindowPos(wd, WINDOW_POS_X, WINDOW_POS_Y);
 
-	int fbwidth, fbheight; //framebuffer width and height
+	GLint fbwidth, fbheight; //framebuffer width and height
 	glfwGetFramebufferSize(wd, &fbwidth, &fbheight);
 	glfwMakeContextCurrent(wd);
 	glViewport(0, 0, (GLsizei) fbwidth, (GLsizei) fbheight);
 	//glfwSetFramebufferSizeCallback(wd, reshape); //don't think I need this
 	//glfwSetWindowCloseCallback(wd, quit);
 	glfwSetKeyCallback(wd, press_special); //general keyboard input
-	enemies.push_back(enemy);
 	do { //game loop (like DisplayFunc callback in GLUT)
 		//glClearColor(1.0f, 0.0f, 1.0f, 0.0f);
 		//glfwGetFramebufferSize(wd, &fbwidth, &fbheight);
@@ -183,7 +185,8 @@ int main(int argc, char **argv) {
         glMatrixMode( GL_MODELVIEW );
         glLoadIdentity();
 
-		++frame_count;
+		//if (frame_count % 10 == 0)
+		//	std::cout << "frame_count = " << frame_count << std::endl;
 		if (game_over == false) {
 			idle_func();
 			game_on();
@@ -192,6 +195,7 @@ int main(int argc, char **argv) {
 			//display game_over window with game over message and score
 			end_game();
 		}
+		++frame_count;
 
 		glfwSwapBuffers(wd);
 		glfwPollEvents();

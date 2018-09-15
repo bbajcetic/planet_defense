@@ -8,6 +8,9 @@ const GLint WINDOW_WIDTH = 500;
 const GLint WINDOW_POS_X = 200;
 const GLint WINDOW_POS_Y = 100;
 
+//other
+const GLint FRAMES_PER_SEC = 60;
+
 //starting variables for main ship
 const GLfloat MAIN_SHIP_X = WINDOW_WIDTH/2;
 const GLfloat MAIN_SHIP_Y = 100;
@@ -24,6 +27,7 @@ const GLfloat ENEMY_SHIP_HEALTH = 50;
 const GLint ENEMY_SHIP_MOVE_LENGTH = 25;
 const GLint TOP_ENEMY_SPACE = WINDOW_HEIGHT;
 const GLint BOTTOM_ENEMY_SPACE = 150;
+const GLint SPAWN_RATE = 5*FRAMES_PER_SEC;
 
 //starting variables for reg_bullet
 const GLint REG_BULLET_LENGTH = 8;
