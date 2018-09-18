@@ -14,7 +14,6 @@
 #include <ctime>
 
 
-GLFWwindow* wd; //window desciptor/handle
 bool game_on = false;
 bool game_over = false;
 GLint score = 0;
@@ -24,6 +23,9 @@ main_ship sonic(MAIN_SHIP_X, MAIN_SHIP_Y, MAIN_SHIP_SIZE, MAIN_SHIP_SPEED);
 std::vector<enemy_ship> enemies;
 std::vector<reg_bullet> projectiles;
 
+void reshape(GLFWwindow* window, int width, int height) {
+	glViewport(0, 0, width, height);
+}
 bool check_collision(hit_box bullet_hb, hit_box ship_hb) {
 	bool condition1 = bullet_hb.left_x <= ship_hb.right_x;
 	bool condition2 = bullet_hb.right_x >= ship_hb.left_x;
@@ -177,24 +179,25 @@ int main(int argc, char **argv) {
 	std::cout << "Press <ENTER> to start playing!\n" << std::flush;
 	glfwSetErrorCallback(err);
 	if (!glfwInit()) exit(1);
-	wd = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, 
+	GLFWwindow* wd = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, 
 						"*** PLANET DEFENSE ***", NULL, NULL);
-	if (!wd) { //in case glfwCreateWindow function fails
-	  glfwTerminate();
-	  exit(1); }
+	if (wd == NULL) { //in case glfwCreateWindow function fails
+		std::cout << "Failed to create window\n";
+		glfwTerminate();
+		exit(1); 
+	}
+	glfwMakeContextCurrent(wd);
 	glfwSetWindowPos(wd, WINDOW_POS_X, WINDOW_POS_Y);
 
 	GLint fbwidth, fbheight; //framebuffer width and height
-	glfwGetFramebufferSize(wd, &fbwidth, &fbheight);
-	glfwMakeContextCurrent(wd);
-	glViewport(0, 0, (GLsizei) fbwidth, (GLsizei) fbheight);
-	//glfwSetFramebufferSizeCallback(wd, reshape); //don't think I need this
+	glfwSetFramebufferSizeCallback(wd, reshape); //for resizing window
 	//glfwSetWindowCloseCallback(wd, quit);
 	glfwSetKeyCallback(wd, press_keys); //general keyboard input
 	do { //game loop (like DisplayFunc callback in GLUT)
 		//glClearColor(1.0f, 0.0f, 1.0f, 0.0f);
-		//glfwGetFramebufferSize(wd, &fbwidth, &fbheight);
-		//glViewport(0, 0, (GLsizei) fbwidth, (GLsizei) fbheight);
+		glfwGetFramebufferSize(wd, &fbwidth, &fbheight);
+		glViewport(0, 0, (GLsizei) fbwidth, (GLsizei) fbheight);
+		//glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 		
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
