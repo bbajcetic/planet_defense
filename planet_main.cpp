@@ -15,6 +15,7 @@
 
 
 GLFWwindow* wd; //window desciptor/handle
+bool game_on = false;
 bool game_over = false;
 GLint score = 0;
 GLint frame_count = 0;
@@ -31,12 +32,15 @@ bool check_collision(hit_box bullet_hb, hit_box ship_hb) {
 	return (condition1 && condition2 && condition3 && condition4);
 }
 
-void game_on(void) {
+void display_loop(void) {
 	sonic.display_ship();
 	for (unsigned int i = 0; i < enemies.size(); ++i)
 		enemies[i].display_ship();
 	for (unsigned int i = 0; i < projectiles.size(); ++i)
 		projectiles[i].display_bullet();
+}
+void start_game(void) {
+	;
 }
 void end_game(void) {
 	sonic.display_ship();
@@ -52,7 +56,7 @@ void quit(GLFWwindow *wd)
 	glfwTerminate();
 	exit(0);
 }
-void press_special(GLFWwindow* wd, int key, int scancode,int action,int mods) {
+void press_keys(GLFWwindow* wd, int key, int scancode,int action,int mods) {
 	std::map<int, int> arrows = { {262, 1}, {263, 3}, {264, 2}, {265, 0} };
 	std::map<int, std::string> directions = { {0, "north"}, {1, "east"}, {2, "south"}, {3, "west"} };
 	if (arrows.find(key) != arrows.end()) {
@@ -76,11 +80,16 @@ void press_special(GLFWwindow* wd, int key, int scancode,int action,int mods) {
 	else if (key == GLFW_KEY_ESCAPE || key == GLFW_KEY_Q) {
 		quit(wd);
 	}
+	else if (key == GLFW_KEY_ENTER) {
+		if (game_on == false) {
+			game_on = true;
+		}
+	}
 	return;
 }
 
-//idle_func: check collisions-> move bullets-> move ships
-void idle_func(void) {
+//game_loop: check collisions-> move bullets-> move ships
+void game_loop(void) {
 	if (frame_count % FRAMES_PER_SEC == 0)
 		sonic.update_ammo();
 	if (frame_count % SPAWN_RATE == 0) {
@@ -165,6 +174,7 @@ void err(int errcode, const char* desc)
 
 int main(int argc, char **argv) {
 	srand(time(NULL));
+	std::cout << "Press <ENTER> to start playing!\n" << std::flush;
 	glfwSetErrorCallback(err);
 	if (!glfwInit()) exit(1);
 	wd = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, 
@@ -180,7 +190,7 @@ int main(int argc, char **argv) {
 	glViewport(0, 0, (GLsizei) fbwidth, (GLsizei) fbheight);
 	//glfwSetFramebufferSizeCallback(wd, reshape); //don't think I need this
 	//glfwSetWindowCloseCallback(wd, quit);
-	glfwSetKeyCallback(wd, press_special); //general keyboard input
+	glfwSetKeyCallback(wd, press_keys); //general keyboard input
 	do { //game loop (like DisplayFunc callback in GLUT)
 		//glClearColor(1.0f, 0.0f, 1.0f, 0.0f);
 		//glfwGetFramebufferSize(wd, &fbwidth, &fbheight);
@@ -198,15 +208,18 @@ int main(int argc, char **argv) {
 
 		//if (frame_count % 10 == 0)
 		//	std::cout << "frame_count = " << frame_count << std::endl;
-		if (game_over == false) {
-			idle_func();
-			game_on();
+		if (game_on == false) {
+			start_game();
+		}
+		else if (game_over == false) {
+			game_loop();
+			display_loop();
+			++frame_count;
 		}
 		else { //(game_over == true)
 			//display game_over window with game over message and score
 			end_game();
 		}
-		++frame_count;
 
 		glfwSwapBuffers(wd);
 		glfwPollEvents();
