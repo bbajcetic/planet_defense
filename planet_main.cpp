@@ -12,6 +12,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include "bitmaps.h"
 
 
 bool game_on = false;
@@ -41,9 +42,7 @@ void display_loop(void) {
 	for (unsigned int i = 0; i < projectiles.size(); ++i)
 		projectiles[i].display_bullet();
 }
-void start_game(void) {
-	;
-}
+void start_game(void);
 void end_game(void) {
 	sonic.display_ship();
 	for (unsigned int i = 0; i < enemies.size(); ++i)
@@ -191,6 +190,8 @@ int main(int argc, char **argv) {
 	glfwSetFramebufferSizeCallback(wd, reshape); //for resizing window
 	glfwSetWindowCloseCallback(wd, quit);
 	glfwSetKeyCallback(wd, press_keys); //general keyboard input
+
+	glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
 	while (!glfwWindowShouldClose(wd)) { //game loop
 		//glClearColor(1.0f, 0.0f, 1.0f, 0.0f);
 		glfwGetFramebufferSize(wd, &fbwidth, &fbheight);
@@ -228,4 +229,54 @@ int main(int argc, char **argv) {
 	glfwTerminate();
 
 	return 0;
+}
+
+void start_game(void) {
+	glClear(GL_COLOR_BUFFER_BIT);
+	sonic.display_ship();
+	glColor3f (1.0, 1.0, 1.0);
+	GLubyte start_title = WINDOW_WIDTH/2 - 168;
+	GLubyte start_letters = WINDOW_WIDTH/2 - 120;
+
+	glRasterPos2i (start_title, WINDOW_HEIGHT-40);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigP);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigL);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigA);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigN);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigE);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigT);
+
+	glRasterPos2i (start_title+168, WINDOW_HEIGHT-40);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigD);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigE);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigF);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigE);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigN);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigS);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigE);
+
+	glRasterPos2i (start_letters, 20);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, P);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, R);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, E);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, S);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, S);
+
+	glRasterPos2i (start_letters+72, 20);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, E);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, N);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, T);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, E);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, R);
+	
+	glRasterPos2i (start_letters+144, 20);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, T);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, O);
+
+	glRasterPos2i (start_letters+180, 20);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, S);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, T);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, A);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, R);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, T);
 }
