@@ -54,9 +54,7 @@ void end_game(void) {
 
 void quit(GLFWwindow *wd)
 {
-	glfwDestroyWindow(wd);
-	glfwTerminate();
-	exit(0);
+	glfwSetWindowShouldClose(wd, true);
 }
 void press_keys(GLFWwindow* wd, int key, int scancode,int action,int mods) {
 	std::map<int, int> arrows = { {262, 1}, {263, 3}, {264, 2}, {265, 0} };
@@ -184,16 +182,16 @@ int main(int argc, char **argv) {
 	if (wd == NULL) { //in case glfwCreateWindow function fails
 		std::cout << "Failed to create window\n";
 		glfwTerminate();
-		exit(1); 
+		return -1;
 	}
 	glfwMakeContextCurrent(wd);
 	glfwSetWindowPos(wd, WINDOW_POS_X, WINDOW_POS_Y);
 
 	GLint fbwidth, fbheight; //framebuffer width and height
 	glfwSetFramebufferSizeCallback(wd, reshape); //for resizing window
-	//glfwSetWindowCloseCallback(wd, quit);
+	glfwSetWindowCloseCallback(wd, quit);
 	glfwSetKeyCallback(wd, press_keys); //general keyboard input
-	do { //game loop (like DisplayFunc callback in GLUT)
+	while (!glfwWindowShouldClose(wd)) { //game loop
 		//glClearColor(1.0f, 0.0f, 1.0f, 0.0f);
 		glfwGetFramebufferSize(wd, &fbwidth, &fbheight);
 		glViewport(0, 0, (GLsizei) fbwidth, (GLsizei) fbheight);
@@ -226,7 +224,7 @@ int main(int argc, char **argv) {
 
 		glfwSwapBuffers(wd);
 		glfwPollEvents();
-	} while (!glfwWindowShouldClose(wd));
+	}
 	glfwTerminate();
 
 	return 0;
