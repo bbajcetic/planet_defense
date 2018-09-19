@@ -43,13 +43,7 @@ void display_loop(void) {
 		projectiles[i].display_bullet();
 }
 void start_game(void);
-void end_game(void) {
-	sonic.display_ship();
-	for (unsigned int i = 0; i < enemies.size(); ++i)
-		enemies[i].display_ship();
-	for (unsigned int i = 0; i < projectiles.size(); ++i)
-		projectiles[i].display_bullet();
-}
+void end_game(void);
 
 void quit(GLFWwindow *wd)
 {
@@ -279,4 +273,33 @@ void start_game(void) {
 	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, A);
 	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, R);
 	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, T);
+}
+void end_game(void) {
+	glClear(GL_COLOR_BUFFER_BIT);
+	sonic.display_ship();
+	glColor3f (1.0, 1.0, 1.0);
+	GLubyte start_msg = WINDOW_WIDTH/2 - 108;
+	//GLubyte score_msg = WINDOW_WIDTH/2 - 120;
+
+	glRasterPos2i (start_msg, WINDOW_HEIGHT/2);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigG);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigA);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigM);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigE);
+
+	glRasterPos2i (start_msg+120, WINDOW_HEIGHT/2);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigO);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigV);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigE);
+	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigR);
+
+	//glRasterPos2i (start_letters, 20);
+	//glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, S);
+	//glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, C);
+	//glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, O);
+	//glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, R);
+	//glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, S);
+	//glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, equals);
+
+	//glRasterPos2i (start_letters+72, 20);
 }
