@@ -18,12 +18,20 @@
 bool game_on = false;
 bool game_over = false;
 GLint score = 0;
+GLint score_hundreds, score_tens, score_ones;
 GLint frame_count = 0;
 //vector <space_ship*> all_ships;
 main_ship sonic(MAIN_SHIP_X, MAIN_SHIP_Y, MAIN_SHIP_SIZE, MAIN_SHIP_SPEED);
 std::vector<enemy_ship> enemies;
 std::vector<reg_bullet> projectiles;
 
+void fill_score_vars() {
+	if (score > 999)
+		score = 999;
+	score_hundreds = score/100;
+	score_tens = (score%100)/10;
+	score_ones = score%10;
+}
 void reshape(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
@@ -144,6 +152,7 @@ void game_loop(void) {
 				bullet_destroyed = true;
 				if (sonic_dead == true) {
 					game_over = true;
+					fill_score_vars();
 					std::cout << "GAME OVER!\n";
 					std::cout << "\nSCORE = " << score << "\n\n";
 				}
@@ -279,7 +288,7 @@ void end_game(void) {
 	sonic.display_ship();
 	glColor3f (1.0, 1.0, 1.0);
 	GLubyte start_msg = WINDOW_WIDTH/2 - 108;
-	//GLubyte score_msg = WINDOW_WIDTH/2 - 120;
+	GLubyte score_msg = WINDOW_WIDTH/2 - 60;
 
 	glRasterPos2i (start_msg, WINDOW_HEIGHT/2);
 	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigG);
@@ -293,13 +302,15 @@ void end_game(void) {
 	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigE);
 	glBitmap (32, 12, 0.0, 0.0, 24.0, 0.0, bigR);
 
-	//glRasterPos2i (start_letters, 20);
-	//glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, S);
-	//glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, C);
-	//glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, O);
-	//glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, R);
-	//glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, S);
-	//glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, equals);
+	glRasterPos2i (score_msg, WINDOW_HEIGHT/4);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, S);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, C);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, O);
+	glBitmap (16, 12, 0.0, 0.0, 12.0, 0.0, R);
+	glBitmap (16, 12, 0.0, 0.0, 20.0, 0.0, E);
+	glBitmap (16, 12, 0.0, 0.0, 20.0, 0.0, equals);
+	glBitmap (16, 12, 0.0, 0.0, 16.0, 0.0, bitmap_nums[score_hundreds]);
+	glBitmap (16, 12, 0.0, 0.0, 16.0, 0.0, bitmap_nums[score_tens]);
+	glBitmap (16, 12, 0.0, 0.0, 16.0, 0.0, bitmap_nums[score_ones]);
 
-	//glRasterPos2i (start_letters+72, 20);
 }
