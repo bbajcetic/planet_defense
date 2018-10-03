@@ -1,6 +1,6 @@
 
 CC = g++
-LIBS=-lglut -lGLU -lGL -lGLEW
+LIBS=-lGLU -lGL -lGLEW
 GLFWLIBS = -lglfw3 -lGL -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread
 CFLAGS = -g -Wall -Wno-deprecated
 

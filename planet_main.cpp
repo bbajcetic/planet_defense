@@ -1,6 +1,5 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <GL/glut.h>
 //#include <ctime>
 #include "globals.h"
 #include "constants.h"

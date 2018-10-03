@@ -2,7 +2,6 @@
 #define PROJECTILE_H
 
 #include <GL/glew.h>
-#include <GL/glut.h>
 #include <string>
 #include "structs.h"
 
