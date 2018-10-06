@@ -11,3 +11,14 @@ Planet Defense is a simple arcade type game (my first game) written in C++ that 
 Progress:
 
 So far, the state of the game contains a main ship that you control and enemy ships that spawn just often enough to make the game tougher the longer you stay alive. You can shoot down the enemy ships with enough shots, and for each one that you destroy, your score increases by ten points. Once you run out of health, the game ends and you can see your score!
+
+Installation:
+
+Run ./install.sh to install required dependencies. Requirements.txt also contains a list of the dependencies in case you want to install them by yourself. After successfully doing so, run make and then ./planet\_defense to play the game.
+
+Controls:
+
+Shoot - space
+Arrow keys - move
+
+Take down as many enemy ships down as you can and enjoy the game!
