@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "bitmaps.h"
+#include <stdio.h>
 
 
 bool game_on = false;
